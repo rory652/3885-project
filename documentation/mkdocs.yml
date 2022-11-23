@@ -1,0 +1,27 @@
+site_name: Covid Tracker
+
+repo_url: https://github.com/rory652/3881-project/
+repo_name: rory652/3881-project
+
+theme:
+  name: material
+  logo: img/icon.png
+  favicon: img/icon.png
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    scheme: slate
+    primary: deep purple
+    accent: purple
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.tracking
+    - navigation.indexes
+
+nav:
+  - Home: index.md
+  - Reference: 
+      - reference/index.md
+  - About: 
+      - about/index.md
