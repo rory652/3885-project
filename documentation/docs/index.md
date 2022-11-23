@@ -1,4 +1,4 @@
-# Welcome to Covid Tracker Documentation
+# Covid Tracker Documentation
 
 See the [reference](reference/index.md) section for help with the API
 

@@ -3,6 +3,8 @@ site_name: Covid Tracker
 repo_url: https://github.com/rory652/3881-project/
 repo_name: rory652/3881-project
 
+edit_uri: ""
+
 theme:
   name: material
   logo: img/icon.png
@@ -25,3 +27,10 @@ nav:
       - reference/index.md
   - About: 
       - about/index.md
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
