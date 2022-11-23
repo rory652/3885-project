@@ -13,7 +13,7 @@
     
     
       
-        <title>Index - Covid Tracker</title>
+        <title>About - Covid Tracker</title>
       
     
     
@@ -65,6 +65,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#about" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -93,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Index
+              About
             
           </span>
         </div>
@@ -373,6 +378,43 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#project-description" class="md-nav__link">
+    Project Description
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#project-diagram" class="md-nav__link">
+    Project Diagram
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-description" class="md-nav__link">
+    API Description
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -386,15 +428,34 @@
                 
                   
 
-  <a href="https://github.com/rory652/3881-project/edit/master/docs/about/index.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
 
+<h1 id="about">About</h1>
+<h2 id="project-description">Project Description</h2>
+<p>This is our Group Design Project for ELEC3885. The aim of our project is to be able to track the spread of Covid-19 within a care home. To do this, we have split this project into 4 stages:</p>
+<ul>
+<li>Wearables: worn by the residents, featuring Bluetooth technology.</li>
+<li>Detection Modules: to detect the positions of the wearables. Uses Bluetooth 5.1 AoA (Angle of Arrival) and AoD (Angle of Departure).</li>
+<li>Back-end: Takes data from Detection Modules and processes it, detect contact between residents and make that accessible through a REST API.</li>
+<li>Front-end: App and Website allowing care home workers to see who needs to be tested and report cases</li>
+</ul>
+<h3 id="project-diagram">Project Diagram</h3>
+<pre class="mermaid"><code>graph LR
+    W1[Wearable 1]
+    W2[Wearable 2]
+    W3[Wearable n]
 
-  <h1>Index</h1>
+    DM1[Detection Module 1]
+    DM2[Detection Module 2]
+    DM3[Detection Module n]
 
+    BE[Back-end]
+    FE[Front-end]
 
+    W1 &amp; W2 &amp; W3 --&gt; DM1 &amp; DM2 &amp; DM3
+    DM1 &amp; DM2 &amp; DM3 --&gt; BE
+    BE --&gt; FE</code></pre>
+<h2 id="api-description">API Description</h2>
+<p>This documentation focuses on the back-end REST API, containing detailed information on the various endpoints and how to access them.</p>
 
 
 
