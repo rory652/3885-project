@@ -19,12 +19,16 @@ theme:
     - navigation.tabs
     - navigation.sections
     - navigation.tracking
-    - navigation.indexes
+    - toc.integrate 
 
 nav:
   - Home: index.md
   - Reference: 
       - reference/index.md
+      - Detection Modules:
+        - reference/detection/endpoint.md
+      - Front-end:
+        - reference/front/endpoint.md
   - About: 
       - about/index.md
 
