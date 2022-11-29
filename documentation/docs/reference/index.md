@@ -2,10 +2,8 @@
 
 This section contains references for the various parts of the backend
 
-Detection Modules:
-
-- [API Endpoints](detection/endpoint.md)
-
-Front-end:
-
-- [API Endpoints](front/endpoint.md)
+- Detection Modules:
+    - [API Endpoints](detection/endpoint.md)
+- Front-end:
+    - [API Endpoints](front/endpoint.md)
+- [Request Structures](requests.md)
