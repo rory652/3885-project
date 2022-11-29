@@ -322,24 +322,36 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../requests/" class="md-nav__link">
+        HTTP Requests
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
     
-      
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_2_3" type="checkbox" id="__nav_2_3" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_2_2">
+        <label class="md-nav__link" for="__nav_2_3">
           Detection Modules
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Detection Modules" data-md-level="2">
-        <label class="md-nav__title" for="__nav_2_2">
+        <label class="md-nav__title" for="__nav_2_3">
           <span class="md-nav__icon md-icon"></span>
           Detection Modules
         </label>
@@ -374,23 +386,21 @@
   
   
     
-      
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_3" type="checkbox" id="__nav_2_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_4" type="checkbox" id="__nav_2_4" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_2_3">
+        <label class="md-nav__link" for="__nav_2_4">
           Front-end
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Front-end" data-md-level="2">
-        <label class="md-nav__title" for="__nav_2_3">
+        <label class="md-nav__title" for="__nav_2_4">
           <span class="md-nav__icon md-icon"></span>
           Front-end
         </label>
@@ -451,8 +461,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#sign-in" class="md-nav__link">
-    Sign-in
+  <a href="#log-in" class="md-nav__link">
+    Log-in
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log-out" class="md-nav__link">
+    Log-out
   </a>
   
 </li>
@@ -491,20 +508,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#add-to-home" class="md-nav__link">
-    Add to Home
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#remove-from-home" class="md-nav__link">
-    Remove from Home
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -519,15 +522,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#get-all" class="md-nav__link">
-    Get All
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get-for-resident" class="md-nav__link">
-    Get For Resident
+  <a href="#get-contacts" class="md-nav__link">
+    Get Contacts
   </a>
   
 </li>
@@ -665,7 +661,7 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       
       
@@ -719,28 +715,690 @@
 
 <h1 id="endpoints">Endpoints</h1>
 <h2 id="users">Users</h2>
+<hr />
 <h3 id="register-user">Register User</h3>
-<h3 id="sign-in">Sign-in</h3>
+<h4 id="request-structure">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>POST</code></li>
+<li>Endpoint: <code>/api/users/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>email</code></td>
+<td align="center">String</td>
+<td align="center">User's email</td>
+</tr>
+<tr>
+<td align="center"><code>name</code></td>
+<td align="center">String</td>
+<td align="center">User's name</td>
+</tr>
+<tr>
+<td align="center"><code>username</code></td>
+<td align="center">String</td>
+<td align="center">User's username</td>
+</tr>
+<tr>
+<td align="center"><code>password</code></td>
+<td align="center">String</td>
+<td align="center">User's password (unhashed)</td>
+</tr>
+<tr>
+<td align="center"><code>care-home</code></td>
+<td align="center">Integer</td>
+<td align="center">Care home ID</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response">Response</h4>
+<details class="success" open="open">
+<summary>Register User Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Register User Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<h3 id="log-in">Log-in</h3>
+<h4 id="request-structure_1">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>POST</code></li>
+<li>Endpoint: <code>/api/login/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>name</code></td>
+<td align="center">String</td>
+<td align="center">User's username or email</td>
+</tr>
+<tr>
+<td align="center"><code>password</code></td>
+<td align="center">String</td>
+<td align="center">User's password (unhashed)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_1">Response</h4>
+<details class="success" open="open">
+<summary>Log-in Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Log-in Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<h3 id="log-out">Log-out</h3>
+<h4 id="request-structure_2">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>POST</code></li>
+<li>Endpoint: <code>/api/logout/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>session-id</code></td>
+<td align="center">Integer</td>
+<td align="center">Session ID for the user</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_2">Response</h4>
+<details class="success" open="open">
+<summary>Log-out Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Log-out Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h3 id="update-user">Update User</h3>
+<h4 id="request-structure_3">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>PUT</code></li>
+<li>Endpoint: <code>/api/users/&lt;user-id&gt;/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>name</code></td>
+<td align="center">Header</td>
+<td align="center">User's username or email</td>
+</tr>
+<tr>
+<td align="center"><code>password</code></td>
+<td align="center">Header</td>
+<td align="center">User's password (unhashed)</td>
+</tr>
+<tr>
+<td align="center"><code>new-name</code></td>
+<td align="center">Header</td>
+<td align="center">User's new username</td>
+</tr>
+<tr>
+<td align="center"><code>new-password</code></td>
+<td align="center">Header</td>
+<td align="center">User's new password (unhashed)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_3">Response</h4>
+<details class="success" open="open">
+<summary>Update User Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Update User Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h3 id="remove-user">Remove User</h3>
+<h4 id="request-structure_4">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>DELETE</code></li>
+<li>Endpoint: <code>/api/users/&lt;user-id&gt;</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>email</code></td>
+<td align="center">String</td>
+<td align="center">User's email</td>
+</tr>
+<tr>
+<td align="center"><code>username</code></td>
+<td align="center">String</td>
+<td align="center">User's username</td>
+</tr>
+<tr>
+<td align="center"><code>password</code></td>
+<td align="center">String</td>
+<td align="center">User's password (unhashed)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_4">Response</h4>
+<details class="success" open="open">
+<summary>Remove User Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Remove User Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h2 id="admin">Admin</h2>
+<hr />
 <h3 id="view-care-home">View Care Home</h3>
-<h3 id="add-to-home">Add to Home</h3>
-<h3 id="remove-from-home">Remove from Home</h3>
+<h4 id="request-structure_5">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>GET</code></li>
+<li>Endpoint: <code>/api/homes/&lt;care-home-id&gt;/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>auth</code></td>
+<td align="center">Authentication</td>
+<td align="center">Authentication information for the admin</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_5">Response</h4>
+<details class="success" open="open">
+<summary>View Care Home Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>View Care Home Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h2 id="contacts">Contacts</h2>
-<h3 id="get-all">Get All</h3>
-<h3 id="get-for-resident">Get For Resident</h3>
+<hr />
+<h3 id="get-contacts">Get Contacts</h3>
+<h4 id="request-structure_6">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>GET</code></li>
+<li>Endpoint: <code>/api/contacts/</code></li>
+<li>Contacts for an individual resident can be accquired using <code>/api/residents/&lt;resident-id&gt;/contacts</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>auth</code></td>
+<td align="center">Authentication</td>
+<td align="center">Authentication information for the user</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_6">Response</h4>
+<details class="success" open="open">
+<summary>Get Contacts Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Get Contacts Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h3 id="acknowledge-contact">Acknowledge Contact</h3>
+<h4 id="request-structure_7">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>POST</code></li>
+<li>Endpoint: <code>/api/contacts/&lt;contact-id&gt;</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>auth</code></td>
+<td align="center">Authentication</td>
+<td align="center">Authentication information for the user</td>
+</tr>
+<tr>
+<td align="center"><code>positive</code></td>
+<td align="center">Boolean</td>
+<td align="center">Whether the contact resulted in a positive case or not</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_7">Response</h4>
+<details class="success" open="open">
+<summary>Aknowledge Contact Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>cknowledge Contact Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h2 id="cases">Cases</h2>
+<hr />
 <h3 id="get-cases">Get Cases</h3>
+<h4 id="request-structure_8">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>GET</code></li>
+<li>Endpoint: <code>/api/cases/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>auth</code></td>
+<td align="center">Authentication</td>
+<td align="center">Authentication information for the user</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_8">Response</h4>
+<details class="success" open="open">
+<summary>Get Cases Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Get Cases Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h3 id="register-case">Register Case</h3>
+<h4 id="request-structure_9">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>POST</code></li>
+<li>Endpoint: <code>/api/cases/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>auth</code></td>
+<td align="center">Authentication</td>
+<td align="center">Authentication information for the user</td>
+</tr>
+<tr>
+<td align="center"><code>resident-id</code></td>
+<td align="center">Integer</td>
+<td align="center">ID of infected resident</td>
+</tr>
+<tr>
+<td align="center"><code>date</code></td>
+<td align="center">Date</td>
+<td align="center">Current date (when the contact was detected)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_9">Response</h4>
+<details class="success" open="open">
+<summary>Register Case Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Register Case Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h3 id="remove-case">Remove Case</h3>
+<h4 id="request-structure_10">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>DELETE</code></li>
+<li>Endpoint: <code>/api/cases/&lt;case-id&gt;/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>auth</code></td>
+<td align="center">Authentication</td>
+<td align="center">Authentication information for the user</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_10">Response</h4>
+<details class="success" open="open">
+<summary>Remove Case Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Remove Case Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h2 id="residents">Residents</h2>
+<hr />
 <h3 id="view-residents">View Residents</h3>
+<h4 id="request-structure_11">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>GET</code></li>
+<li>Endpoint: <code>/api/residents/</code></li>
+<li>Information for a specific resident can be accquired using <code>/api/residents/&lt;resident-id&gt;/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>auth</code></td>
+<td align="center">Authentication</td>
+<td align="center">Authentication information for the user</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_11">Response</h4>
+<details class="success" open="open">
+<summary>View Residents Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>View Residents Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h3 id="add-resident">Add Resident</h3>
+<h4 id="request-structure_12">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>POST</code></li>
+<li>Endpoint: <code>/api/residents/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>auth</code></td>
+<td align="center">Authentication</td>
+<td align="center">Authentication information for the user</td>
+</tr>
+<tr>
+<td align="center"><code>name</code></td>
+<td align="center">String</td>
+<td align="center">Resident's name</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_12">Response</h4>
+<details class="success" open="open">
+<summary>Add Resident Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Add Resident Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h3 id="remove-resident">Remove Resident</h3>
+<h4 id="request-structure_13">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>DELETE</code></li>
+<li>Endpoint: <code>/api/residents/&lt;resident-id&gt;/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>auth</code></td>
+<td align="center">Authentication</td>
+<td align="center">Authentication information for the user</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_13">Response</h4>
+<details class="success" open="open">
+<summary>Remove Resident Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Remove Resident Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 <h2 id="modules">Modules</h2>
+<hr />
 <h3 id="get-status">Get Status</h3>
+<h4 id="request-structure_14">Request Structure</h4>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li>Request Type: <code>GET</code></li>
+<li>Endpoint: <code>/api/modules/</code></li>
+<li>Status of an individual module can be accquired using <code>/api/modules/&lt;module-id&gt;/</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">Field</th>
+<th align="center">Type</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>auth</code></td>
+<td align="center">Authentication</td>
+<td align="center">Authentication information for the user</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="response_14">Response</h4>
+<details class="success" open="open">
+<summary>Get Status Successful Response</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="nt">&quot;Response&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
+<details class="failure">
+<summary>Get Status Failure</summary>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">    </span><span class="nt">&quot;Error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Here&quot;</span><span class="w"></span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+</details>
 
 
 
@@ -798,11 +1456,6 @@
       <div class="md-copyright">
   
   
-    Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
-    </a>
-  
 </div>
       
     </div>
@@ -814,7 +1467,7 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.tracking", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tracking", "toc.integrate", "navigation.expand"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
       <script src="../../../assets/javascripts/bundle.d6c3db9e.min.js"></script>
