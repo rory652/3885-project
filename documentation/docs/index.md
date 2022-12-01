@@ -1,4 +1,4 @@
-# Covid Tracker Documentation
+# JERB Tracker Documentation
 
 See the [reference](reference/index.md) section for help with the API
 
