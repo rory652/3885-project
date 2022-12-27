@@ -15,7 +15,7 @@ app.secret_key = 'temporary'
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_REDIS'] = redis.from_url('redis://localhost:6379')
+app.config['SESSION_REDIS'] = redis.from_url("redis://redis:6379")
 
 # Create and initialize the Flask-Session object AFTER `app` has been configured
 server_session = Session(app)
@@ -44,12 +44,14 @@ class Users(Resource):
 
 class UserSession(Resource):
     def post(self):
+        print("hi")
+
         args = request.get_json(force=True)
 
         session['username'] = args["username"]
         session['permissions'] = args["permissions"]
 
-        return {'page': 'users post'}
+        return {'page': 'users post'}, 201
 
     def delete(self):
         session.pop('username', default=None)
