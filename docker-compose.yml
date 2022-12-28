@@ -4,5 +4,16 @@ services:
     build: .
     ports:
       - "8000:5000"
-  redis:
+    container_name: api
+  session:
     image: "redis:alpine"
+    command: redis-server --port 6379 --requirepass  ${SESSION_PASS}
+    expose:
+      - "6379"
+    container_name: session
+  db:
+    image: "redis:alpine"
+    command: redis-server --port 6380 --requirepass  ${DB_PASS}
+    expose:
+      - "6380"
+    container_name: db

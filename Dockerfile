@@ -6,6 +6,6 @@ RUN apk add --no-cache gcc musl-dev linux-headers
 COPY source/requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 EXPOSE 5000
+COPY .env .env
 COPY source/ .
-CMD ["ls"]
 CMD ["flask", "run"]

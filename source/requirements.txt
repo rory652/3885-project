@@ -2,3 +2,4 @@ flask
 flask-session
 flask-restful
 redis
+python-dotenv
