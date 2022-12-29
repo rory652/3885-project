@@ -1,9 +1,13 @@
 version: "3.9"
 services:
   api:
-    build: .
+    build:
+      context: ./
+      dockerfile: ./api/Dockerfile
     ports:
-      - "8000:5000"
+      - "5000:5000"
+    expose:
+      - "5000"
     container_name: api
   session:
     image: "redis:alpine"
@@ -17,3 +21,8 @@ services:
     expose:
       - "6380"
     container_name: db
+  client:
+    build: ./client
+    ports:
+      - "8000:8000"
+    container_name: client
