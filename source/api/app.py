@@ -5,6 +5,8 @@ from flask_session import Session
 from os import getenv
 from dotenv import load_dotenv
 
+import users
+
 load_dotenv()
 APP_KEY = getenv('APP_KEY')
 SESSION_PASS = getenv('SESSION_PASS')
@@ -27,6 +29,7 @@ app.config['SESSION_REDIS'] = redis.Redis(host="session", port=6379, password=SE
 # Create and initialize the Flask-Session object AFTER `app` has been configured
 server_session = Session(app)
 
+userDB = users.Users(DB_PASS)
 
 class User(Resource):
     def get(self, username):
@@ -53,10 +56,12 @@ class UserSession(Resource):
     def post(self):
         args = request.get_json(force=True)
 
-        session['username'] = args["username"]
-        session['permissions'] = args["permissions"]
+        if userDB.verify(args["username"], args["password"]):
+            session['username'] = args["username"]
 
-        return {'page': 'users post'}, 201
+            return "session created", 201
+
+        return "invalid credentials", 400
 
     def delete(self):
         session.pop('username', default=None)
