@@ -10,6 +10,16 @@ class Users:
     def generate_salt(self):
         return token_hex(32)
 
+    def get(self, username=None):
+        if username is None:
+            users = []
+            for key in self._db.iterator():
+                # Make it cache later?
+                users.append({"username": key, "permissions": self._db[key]["permissions"]})
+            return users
+        else:
+            return {"username": username, "permissions": self._db[username]["permissions"]}
+
     def add(self, username, password, permissions=0):
         # Username must be unique
         if username in self._db:
@@ -42,3 +52,29 @@ class Users:
             return True
 
         return False
+
+    def delete(self, username):
+        del self._db[username]
+
+    def update(self, username, newUsername, newPassword):
+        # Username must be unique
+        if newUsername in self._db:
+            return None
+
+        if newUsername is None and newPassword is None:
+            return None
+
+        # Update username - move to new value and delete
+        if newUsername is not None:
+            self._db[newUsername] = self._db[username]
+            del self._db[username]
+
+            username = newUsername
+
+        if newPassword is not None:
+            salt = self.generate_salt()
+            passHash = self.hash(newPassword, salt)
+
+            self._db[username] = {"hash": passHash, "salt": salt, "permissions": self._db[username]["permissions"]}
+
+        return self._db[username]

@@ -46,5 +46,8 @@ class Database(dict):
     def __contains__(self, key):
         return self._connection.exists(key)
 
+    def iterator(self, pattern="*"):
+        return self._connection.scan_iter(pattern)
+
     def test(self):
         return self._connection.ping()
