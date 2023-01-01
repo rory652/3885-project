@@ -21,9 +21,19 @@ services:
     expose:
       - "6380"
     container_name: db
-# Uncomment to run the debug client:
-#  client:
-#    build: ./client
-#    ports:
-#      - "8000:8000"
-#    container_name: client
+  client:
+    build: ./client
+    ports:
+      - "8000:8000"
+    container_name: client
+    profiles:
+      - debug
+  tests:
+    build: ./tests
+    container_name: tests
+    depends_on:
+      - api
+      - session
+      - db
+    profiles:
+      - test
