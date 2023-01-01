@@ -5,7 +5,10 @@ from flask_session import Session
 from os import getenv
 from dotenv import load_dotenv
 
-import users
+from databases.users import Users
+from databases.contacts import Contacts
+from databases.residents import Residents
+from databases.modules import Modules
 
 load_dotenv()
 APP_KEY = getenv('APP_KEY')
@@ -30,7 +33,162 @@ app.config['SESSION_REDIS'] = redis.Redis(host="session", port=6379, password=SE
 server_session = Session(app)
 
 # Different database objects
-userDB = users.Users(DB_PASS)
+userDB = Users(DB_PASS)
+contactDB = Contacts(DB_PASS)
+residentDB = Residents(DB_PASS)
+moduleDB = Modules(DB_PASS)
+
+# Permissions:
+#   0 - Resident
+#   1 - Nurse
+#   2 - Admin
+#   -1 - Module
+PERMISSIONS = {"resident": 0, "nurse": 1, "admin": 2, "module": -1}
+
+
+class Contact(Resource):
+    def delete(self, contact_id):
+        if "username" not in session:
+            return "user not logged in", 401
+
+        if session.get("permissions") < PERMISSIONS["nurse"]:
+            return "invalid credentials", 403
+
+        contactDB.delete(contact_id)
+        return '', 204
+
+
+class Contacts(Resource):
+    def get(self):
+        if "username" not in session:
+            return "user not logged in", 401
+
+        if session.get("permissions") < PERMISSIONS["nurse"]:
+            return "invalid credentials", 403
+
+        return contactDB.get()
+
+
+class Module(Resource):
+    def get(self, module_id):
+        if "username" not in session:
+            return "no user logged in", 401
+
+        if session.get("permissions") < PERMISSIONS["admin"]:
+            return 'invalid user', 403
+
+        return moduleDB.get(module_id)
+
+    def put(self, module_id):
+        if "username" not in session:
+            return "no user logged in", 401
+
+        if not session.get("permissions") == PERMISSIONS["module"]:
+            return "invalid user", 403
+
+        args = request.get_json(force=True)
+
+        newInfo = moduleDB.update(module_id, args["new-status"], args["new-room"])
+        if newInfo is None:
+            return "field not set", 400
+
+        return "module updated", 201
+
+    def delete(self, module_id):
+        if "username" not in session:
+            return "user not logged in", 401
+
+        if session.get("permissions") < PERMISSIONS["admin"]:
+            return "invalid credentials", 403
+
+        contactDB.delete(module_id)
+        return '', 204
+
+
+class Modules(Resource):
+    def get(self):
+        if "username" not in session:
+            return "user not logged in", 401
+
+        if session.get("permissions") < PERMISSIONS["admin"]:
+            return "invalid credentials", 403
+
+        return moduleDB.get()
+
+    def post(self):
+        if "username" not in session:
+            return "user not logged in", 401
+
+        if session.get("permissions") < PERMISSIONS["admin"]:
+            return "invalid credentials", 403
+
+        args = request.get_json(force=True)
+
+        if not moduleDB.add(args["room"], args["status"]):
+            return "failed to add resident", 400
+
+        return "module added", 201
+
+
+class Resident(Resource):
+    def get(self, resident_id):
+        if "username" not in session:
+            return "no user logged in", 401
+
+        if session.get("permissions") < PERMISSIONS["nurse"]:
+            return 'invalid user', 403
+
+        return residentDB.get(resident_id)
+
+    def put(self, resident_id):
+        if "username" not in session:
+            return "no user logged in", 401
+
+        if not session.get("permissions") < PERMISSIONS["nurse"]:
+            return "invalid user", 403
+
+        args = request.get_json(force=True)
+
+        newInfo = residentDB.update(resident_id, args["new-name"], args["new-wearable"], args["new-status"])
+        if newInfo is None:
+            return "field not set", 400
+
+        return "resident updated", 201
+
+    def delete(self, resident_id):
+        if "username" not in session:
+            return "user not logged in", 401
+
+        if session.get("permissions") < PERMISSIONS["nurse"]:
+            return "invalid credentials", 403
+
+        contactDB.delete(resident_id)
+        return '', 204
+
+
+class Residents(Resource):
+    def get(self):
+        if "username" not in session:
+            return "user not logged in", 401
+
+        if session.get("permissions") < PERMISSIONS["nurse"]:
+            return "invalid credentials", 403
+
+        return residentDB.get()
+
+    def post(self):
+        if "username" not in session:
+            return "user not logged in", 401
+
+        if session.get("permissions") < PERMISSIONS["nurse"]:
+            return "invalid credentials", 403
+
+        args = request.get_json(force=True)
+
+        if not residentDB.add(args["name"], args["wearable"], args["status"]):
+            return "failed to add resident", 400
+
+        return "resident added", 201
 
 
 class User(Resource):
@@ -81,7 +239,7 @@ class Users(Resource):
         if "username" not in session:
             return "user not logged in", 401
 
-        if session.get("permissions") < 3:
+        if session.get("permissions") < PERMISSIONS["admin"]:
             return "invalid credentials", 403
 
         return userDB.get()
@@ -121,6 +279,16 @@ class UserSession(Resource):
         return '', 204
 
 
+api.add_resource(Contacts, '/contacts/')
+api.add_resource(Contact, '/contacts/<contact_id>')
+
+api.add_resource(Modules, '/modules/')
+api.add_resource(Module, '/modules/<module_id>')
+
+api.add_resource(Residents, '/residents/')
+api.add_resource(Resident, '/residents/<resident_id>')
+
 api.add_resource(Users, '/users/')
 api.add_resource(User, '/users/<username>')
+
 api.add_resource(UserSession, '/login/')

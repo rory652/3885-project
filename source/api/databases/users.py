@@ -1,4 +1,4 @@
-import database as db
+import databases.database as db
 from hashlib import sha256
 from secrets import token_hex
 
