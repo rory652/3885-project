@@ -92,7 +92,7 @@ class Module(Resource):
         if newInfo is None:
             return "field not set", 400
 
-        return "module updated", 201
+        return newInfo, 201
 
     def delete(self, module_id):
         if "username" not in session:
@@ -193,11 +193,21 @@ class Residents(Resource):
 
 class User(Resource):
     def get(self, username):
-        if session.get("username") == username:
-            userDB.get(username)
-        return {"user": username}
+        if not userDB.contains(username):
+            return "resource not found", 404
+
+        if "username" not in session:
+            return "no user logged in", 401
+
+        if not session.get("username") == username:
+            return "invalid user", 403
+
+        return userDB.get(username)
 
     def put(self, username):
+        if not userDB.contains(username):
+            return "resource not found", 404
+
         if "username" not in session:
             return "no user logged in", 401
 
@@ -210,16 +220,25 @@ class User(Resource):
         if not userDB.verify(args["username"], args["password"]):
             return "invalid credentials", 400
 
-        newInfo = userDB.update(args["username"], args["new-username"], args["new-password"])
+        if "new-username" not in args:
+            args["new-username"] = None
+
+        if "new-password" not in args:
+            args["new-password"] = None
+
+        newUsername, newInfo = userDB.update(args["username"], args["new-username"], args["new-password"])
         if newInfo is None:
             return "field not set", 400
 
         # Update session
-        session['username'] = newInfo["username"]
+        session['username'] = newUsername
         session['permissions'] = newInfo["permissions"]
         return "user updated", 201
 
     def delete(self, username):
+        if not userDB.contains(username):
+            return "resource not found", 404
+
         if "username" not in session:
             return "no user logged in", 401
 

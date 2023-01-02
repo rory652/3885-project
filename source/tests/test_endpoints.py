@@ -1,60 +1,380 @@
-import requests
+import pytest
+import requests, re
 
 
 class TestContacts:
-    def test_contacts_get(self):
-        assert 1 == 1
+    class TestGet:
+        def test_contacts_get_200(self):
+            r = requests.get(''.join([pytest.baseurl, "contacts"]), cookies=pytest.adminSession)
 
-    def test_contact_delete(self):
-        assert 1 == 1
+            assert r.status_code == 200
+
+        def test_contacts_get_401(self):
+            r = requests.get(''.join([pytest.baseurl, "contacts"]))
+
+            assert r.status_code == 401
+
+        def test_contacts_get_403(self):
+            r = requests.get(''.join([pytest.baseurl, "contacts"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 403
+
+    class TestDelete:
+        def test_contact_delete_204(self):
+            r = requests.delete(''.join([pytest.baseurl, "contacts", "/temporary"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 204
+
+        def test_contact_delete_401(self):
+            r = requests.delete(''.join([pytest.baseurl, "contacts", "/temporary"]))
+
+            assert r.status_code == 401
+
+        def test_contact_delete_403(self):
+            r = requests.delete(''.join([pytest.baseurl, "contacts", "/temporary"]), cookies=pytest.residentSession)
+
+            assert r.status_code == 403
+
+        def test_contact_delete_404(self):
+            r = requests.delete(''.join([pytest.baseurl, "contacts", "/doesnt_exist"]))
+
+            assert r.status_code == 404
 
 
 class TestModules:
-    def test_modules_get(self):
-        assert 1 == 1
+    class TestGet:
+        def test_modules_get_200(self):
+            r = requests.get(''.join([pytest.baseurl, "modules"]), cookies=pytest.adminSession)
 
-    def test_modules_post(self):
-        assert 1 == 1
+            assert r.status_code == 200
 
-    def test_module_get(self):
-        assert 1 == 1
+        def test_modules_get_401(self):
+            r = requests.get(''.join([pytest.baseurl, "modules"]))
 
-    def test_module_put(self):
-        assert 1 == 1
+            assert r.status_code == 401
 
-    def test_module_delete(self):
-        assert 1 == 1
+        def test_modules_get_403(self):
+            r = requests.get(''.join([pytest.baseurl, "modules"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 403
+
+    class TestPost:
+        def test_modules_post_201(self):
+            r = requests.post(''.join([pytest.baseurl, "modules"]), cookies=pytest.adminSession)
+
+            assert r.status_code == 201
+
+        def test_modules_post_400(self):
+            r = requests.post(''.join([pytest.baseurl, "modules"]))
+
+            assert r.status_code == 400
+
+        def test_modules_post_401(self):
+            r = requests.post(''.join([pytest.baseurl, "modules"]), cookies=pytest.adminSession)
+
+            assert r.status_code == 401
+
+        def test_modules_post_403(self):
+            r = requests.post(''.join([pytest.baseurl, "modules"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 403
+
+
+class TestModule:
+    class TestGet:
+        def test_module_get_200(self):
+            r = requests.get(''.join([pytest.baseurl, "modules", "/temporary"]), cookies=pytest.adminSession)
+
+            assert r.status_code == 200
+
+        def test_module_get_401(self):
+            r = requests.get(''.join([pytest.baseurl, "modules", "/temporary"]))
+
+            assert r.status_code == 401
+
+        def test_module_get_403(self):
+            r = requests.get(''.join([pytest.baseurl, "modules", "/temporary"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 403
+
+        def test_module_get_404(self):
+            r = requests.get(''.join([pytest.baseurl, "modules", "/doesnt_exist"]), cookies=pytest.adminSession)
+
+            assert r.status_code == 404
+
+    class TestPut:
+        def test_module_put_201(self):
+            r = requests.put(''.join([pytest.baseurl, "modules", "/temporary"]), cookies=pytest.moduleSession)
+
+            assert r.status_code == 201
+
+        def test_module_put_400(self):
+            r = requests.put(''.join([pytest.baseurl, "modules", "/temporary"]), cookies=pytest.moduleSession)
+
+            assert r.status_code == 400
+
+        def test_module_put_401(self):
+            r = requests.put(''.join([pytest.baseurl, "modules", "/temporary"]))
+
+            assert r.status_code == 401
+
+        def test_module_put_403(self):
+            r = requests.put(''.join([pytest.baseurl, "modules", "/temporary"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 403
+
+        def test_module_put_404(self):
+            r = requests.put(''.join([pytest.baseurl, "modules", "/doesnt_exist"]))
+
+            assert r.status_code == 404
+
+    class TestDelete:
+        def test_module_delete_204(self):
+            r = requests.delete(''.join([pytest.baseurl, "modules", "/temporary"]), cookies=pytest.adminSession)
+
+            assert r.status_code == 204
+
+        def test_module_delete_401(self):
+            r = requests.delete(''.join([pytest.baseurl, "modules", "/temporary"]))
+
+            assert r.status_code == 401
+
+        def test_module_delete_403(self):
+            r = requests.delete(''.join([pytest.baseurl, "modules", "/temporary"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 403
+
+        def test_module_delete_404(self):
+            r = requests.delete(''.join([pytest.baseurl, "modules", "/doesnt_exist"]))
+
+            assert r.status_code == 404
 
 
 class TestResidents:
-    def test_residents_get(self):
-        assert 1 == 1
+    class TestGet:
+        def test_residents_get_200(self):
+            r = requests.get(''.join([pytest.baseurl, "residents"]), cookies=pytest.nurseSession)
 
-    def test_residents_post(self):
-        assert 1 == 1
+            assert r.status_code == 200
 
-    def test_resident_get(self):
-        assert 1 == 1
+        def test_residents_get_401(self):
+            r = requests.get(''.join([pytest.baseurl, "residents"]))
 
-    def test_resident_put(self):
-        assert 1 == 1
+            assert r.status_code == 401
 
-    def test_resident_delete(self):
-        assert 1 == 1
+        def test_residents_get_403(self):
+            r = requests.get(''.join([pytest.baseurl, "residents"]), cookies=pytest.residentSession)
+
+            assert r.status_code == 403
+
+    class TestPost:
+        def test_residents_post_201(self):
+            r = requests.post(''.join([pytest.baseurl, "residents"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 201
+
+        def test_residents_post_400(self):
+            r = requests.post(''.join([pytest.baseurl, "residents"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 400
+
+        def test_residents_post_401(self):
+            r = requests.post(''.join([pytest.baseurl, "residents"]))
+
+            assert r.status_code == 401
+
+        def test_residents_post_403(self):
+            r = requests.post(''.join([pytest.baseurl, "residents"]), cookies=pytest.residentSession)
+
+            assert r.status_code == 403
+
+
+class TestResident:
+    class TestGet:
+        def test_resident_get_200(self):
+            r = requests.get(''.join([pytest.baseurl, "residents", "/temporary"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 201
+
+        def test_resident_get_401(self):
+            r = requests.get(''.join([pytest.baseurl, "residents", "/temporary"]))
+
+            assert r.status_code == 401
+
+        def test_resident_get_403(self):
+            r = requests.get(''.join([pytest.baseurl, "residents", "/temporary"]), cookies=pytest.residentSession)
+
+            assert r.status_code == 403
+
+        def test_resident_get_404(self):
+            r = requests.get(''.join([pytest.baseurl, "residents", "/doesnt_exist"]))
+
+            assert r.status_code == 404
+
+    class TestPut:
+        def test_resident_put_201(self):
+            r = requests.put(''.join([pytest.baseurl, "residents", "/temporary"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 201
+
+        def test_resident_put_400(self):
+            r = requests.put(''.join([pytest.baseurl, "residents", "/temporary"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 400
+
+        def test_resident_put_401(self):
+            r = requests.put(''.join([pytest.baseurl, "residents", "/temporary"]))
+
+            assert r.status_code == 401
+
+        def test_resident_put_403(self):
+            r = requests.put(''.join([pytest.baseurl, "residents", "/temporary"]), cookies=pytest.residentSession)
+
+            assert r.status_code == 403
+
+        def test_resident_put_404(self):
+            r = requests.put(''.join([pytest.baseurl, "residents", "/doesnt_exist"]))
+
+            assert r.status_code == 404
+
+    class TestDelete:
+        def test_resident_delete_204(self):
+            r = requests.delete(''.join([pytest.baseurl, "residents", "/temporary"]), cookies=pytest.nurseSession)
+
+            assert r.status_code == 204
+
+        def test_resident_delete_401(self):
+            r = requests.delete(''.join([pytest.baseurl, "residents", "/temporary"]))
+
+            assert r.status_code == 401
+
+        def test_resident_delete_403(self):
+            r = requests.delete(''.join([pytest.baseurl, "residents", "/temporary"]), cookies=pytest.residentSession)
+
+            assert r.status_code == 403
+
+        def test_resident_delete_404(self):
+            r = requests.delete(''.join([pytest.baseurl, "residents", "/doesnt_exist"]))
+
+            assert r.status_code == 404
 
 
 class TestUsers:
-    def test_users_get(self):
-        assert 1 == 1
+    class TestGet:
+        def test_users_get_200(self):
+            r = requests.get(''.join([pytest.baseurl, "users"]), cookies=pytest.adminSession)
+            assert r.status_code == 200
 
-    def test_users_post(self):
-        assert 1 == 1
+        def test_users_get_401(self):
+            r = requests.get(''.join([pytest.baseurl, "users"]))
+            assert r.status_code == 401
 
-    def test_user_get(self):
-        assert 1 == 1
+        def test_users_get_403(self):
+            r = requests.get(''.join([pytest.baseurl, "users"]), cookies=pytest.residentSession)
+            assert r.status_code == 403
 
-    def test_user_put(self):
-        assert 1 == 1
+    class TestPost:
+        def test_users_post_201(self):
+            r = requests.post(''.join([pytest.baseurl, "users"]), json={"username": "test_user", "password": "test"})
 
-    def test_user_delete(self):
-        assert 1 == 1
+            session = {"session": re.search("session=(.*?);", r.headers["Set-Cookie"]).group(1)}
+            requests.delete(''.join([pytest.baseurl, "users", "/test_user"]), cookies=session)
+
+            assert r.status_code == 201
+
+        def test_users_post_400(self):
+            r = requests.post(''.join([pytest.baseurl, "users"]), json={"username": "test_user_400", "password": "test"})
+            r2 = requests.post(''.join([pytest.baseurl, "users"]), json={"username": "test_user_400", "password": "new_password"})
+
+            session = {"session": re.search("session=(.*?);", r.headers["Set-Cookie"]).group(1)}
+            requests.delete(''.join([pytest.baseurl, "users", "/test_user_400"]), cookies=session)
+
+            assert r2.status_code == 400
+
+
+class TestUser:
+    class TestGet:
+        def test_user_get_200(self):
+            r = requests.get(''.join([pytest.baseurl, "users", "/test_nurse"]), cookies=pytest.nurseSession)
+            assert r.status_code == 200
+
+        def test_user_get_401(self):
+            r = requests.get(''.join([pytest.baseurl, "users", "/test_nurse"]))
+            assert r.status_code == 401
+
+        def test_user_get_403(self):
+            r = requests.get(''.join([pytest.baseurl, "users", "/test_nurse"]), cookies=pytest.residentSession)
+            assert r.status_code == 403
+
+        def test_user_get_404(self):
+            r = requests.get(''.join([pytest.baseurl, "users", "/doesnt_exist"]), cookies=pytest.residentSession)
+            assert r.status_code == 404
+
+    class TestPut:
+        def test_user_put_201(self):
+            r = requests.post(''.join([pytest.baseurl, "users"]), json={"username": "test_put", "password": "test"})
+
+            session = {"session": re.search("session=(.*?);", r.headers["Set-Cookie"]).group(1)}
+
+            r2 = requests.put(''.join([pytest.baseurl, "users", "/test_put"]), cookies=session,
+                              json={"username": "test_put", "password": "test", "new-username": "test_put_2"})
+            session2 = {"session": re.search("session=(.*?);", r2.headers["Set-Cookie"]).group(1)}
+
+            # Clean up
+            requests.delete(''.join([pytest.baseurl, "users", "/test_put_2"]), cookies=session2)
+
+            assert r2.status_code == 201
+
+        def test_user_put_400(self):
+            r = requests.post(''.join([pytest.baseurl, "users"]), json={"username": "test_put", "password": "test"})
+
+            session = {"session": re.search("session=(.*?);", r.headers["Set-Cookie"]).group(1)}
+
+            r2 = requests.put(''.join([pytest.baseurl, "users", "/test_put"]), cookies=session,
+                              json={"username": "test_put", "password": "wrong_password", "new-username": "test_put_2"})
+
+            # Clean up
+            requests.delete(''.join([pytest.baseurl, "users", "/test_put"]), cookies=session)
+
+            assert r2.status_code == 400
+
+        def test_user_put_401(self):
+            r = requests.put(''.join([pytest.baseurl, "users", "/test_nurse"]))
+
+            assert r.status_code == 401
+
+        def test_user_put_403(self):
+            r = requests.put(''.join([pytest.baseurl, "users", "/test_nurse"]), cookies=pytest.residentSession)
+
+            assert r.status_code == 403
+
+        def test_user_put_404(self):
+            r = requests.put(''.join([pytest.baseurl, "users", "/doesnt_exist"]))
+
+            assert r.status_code == 404
+
+    class TestDelete:
+        def test_user_delete_204(self):
+            r = requests.post(''.join([pytest.baseurl, "users"]), json={"username": "test_delete", "password": "test"})
+
+            session = {"session": re.search("session=(.*?);", r.headers["Set-Cookie"]).group(1)}
+
+            r2 = requests.delete(''.join([pytest.baseurl, "users", "/test_delete"]), cookies=session)
+
+            assert r2.status_code == 204
+
+        def test_user_delete_401(self):
+            r = requests.delete(''.join([pytest.baseurl, "users", "/test_nurse"]))
+
+            assert r.status_code == 401
+
+        def test_user_delete_403(self):
+            r = requests.delete(''.join([pytest.baseurl, "users", "/test_nurse"]), cookies=pytest.residentSession)
+
+            assert r.status_code == 403
+
+        def test_user_delete_404(self):
+            r = requests.delete(''.join([pytest.baseurl, "users", "/doesnt_exist"]))
+
+            assert r.status_code == 404
+
