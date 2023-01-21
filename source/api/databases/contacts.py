@@ -5,6 +5,9 @@ class Contacts:
     def __init__(self, password):
         self._db = db.Database("db", 6380, 2, password)
 
+    def contains(self, contact_id):
+        return contact_id in self._db
+
     def get(self):
         contacts = []
         for key in self._db.iterator():

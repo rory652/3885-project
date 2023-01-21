@@ -6,6 +6,9 @@ class Modules:
     def __init__(self, password):
         self._db = db.Database("db", 6380, 3, password)
 
+    def contains(self, module_id):
+        return module_id in self._db
+
     def get(self, module_id=None):
         if module_id is None:
             modules = []
@@ -21,7 +24,7 @@ class Modules:
 
         self._db[module_id] = {"room": room, "status": status}
 
-        return True
+        return {"id": module_id, "data": self._db[module_id]}, 201
 
     def delete(self, module_id):
         del self._db[module_id]
@@ -39,7 +42,7 @@ class Modules:
 
     def generateID(self):
         new_id = token_hex(8)
-        while new_id not in self._db:
+        while new_id in self._db:
             new_id = token_hex(8)
 
         return new_id

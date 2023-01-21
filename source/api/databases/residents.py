@@ -6,6 +6,9 @@ class Residents:
     def __init__(self, password):
         self._db = db.Database("db", 6380, 1, password)
 
+    def contains(self, resident_id):
+        return resident_id in self._db
+
     def get(self, resident_id=None):
         if resident_id is None:
             residents = []
@@ -17,15 +20,15 @@ class Residents:
             return residents
         else:
             resident = self._db[resident_id]
-            return {{"resident": resident_id, "name": resident["name"],
-                     "wearable": resident["wearable"], "covid": resident["covid"]}}
+            return {"resident": resident_id, "name": resident["name"],
+                    "wearable": resident["wearable"], "covid": resident["covid"]}
 
-    def add(self, name, wearable, covid=False):
+    def add(self, name, wearable, covid="false"):
         resident_id = self.generateID()
 
         self._db[resident_id] = {"name": name, "wearable": wearable, "covid": covid}
 
-        return True
+        return {"id": resident_id, "name": name, "wearable": wearable, "covid": covid}, 201
 
     def delete(self, resident_id):
         del self._db[resident_id]
@@ -43,7 +46,7 @@ class Residents:
             newWearable = oldInfo["wearable"]
 
         if newStatus is None:
-            newStatus = oldInfo["status"]
+            newStatus = oldInfo["covid"]
 
         self._db[resident_id] = {"name": newName, "wearable": newWearable, "covid": newStatus}
 
@@ -51,7 +54,7 @@ class Residents:
 
     def generateID(self):
         new_id = token_hex(8)
-        while new_id not in self._db:
+        while new_id in self._db:
             new_id = token_hex(8)
 
         return new_id

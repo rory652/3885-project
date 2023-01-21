@@ -4,7 +4,7 @@ from time import time
 
 class Database(dict):
     def __init__(self, host, port, database=0, password=None, expires=3600):
-        self._connection = redis.Redis(host=host, port=port, db=database, password=password, decode_responses=True)
+        self._connection = redis.StrictRedis(host=host, port=port, db=database, password=password, decode_responses=True)
 
         # Check the connection - improve later
         self._connection.ping()

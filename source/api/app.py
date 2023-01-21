@@ -48,6 +48,9 @@ PERMISSIONS = {"resident": 0, "nurse": 1, "admin": 2, "module": -1}
 
 class Contact(Resource):
     def delete(self, contact_id):
+        if not contactDB.contains(contact_id):
+            return "resource not found", 404
+
         if "username" not in session:
             return "user not logged in", 401
 
@@ -71,6 +74,9 @@ class Contacts(Resource):
 
 class Module(Resource):
     def get(self, module_id):
+        if not moduleDB.contains(module_id):
+            return "resource not found", 404
+
         if "username" not in session:
             return "no user logged in", 401
 
@@ -80,6 +86,9 @@ class Module(Resource):
         return moduleDB.get(module_id)
 
     def put(self, module_id):
+        if not moduleDB.contains(module_id):
+            return "resource not found", 404
+
         if "username" not in session:
             return "no user logged in", 401
 
@@ -88,6 +97,9 @@ class Module(Resource):
 
         args = request.get_json(force=True)
 
+        if "new-status" not in args:
+            args["new-status"] = "no status"
+
         newInfo = moduleDB.update(module_id, args["new-status"], args["new-room"])
         if newInfo is None:
             return "field not set", 400
@@ -95,13 +107,16 @@ class Module(Resource):
         return newInfo, 201
 
     def delete(self, module_id):
+        if not moduleDB.contains(module_id):
+            return "resource not found", 404
+
         if "username" not in session:
             return "user not logged in", 401
 
         if session.get("permissions") < PERMISSIONS["admin"]:
             return "invalid credentials", 403
 
-        contactDB.delete(module_id)
+        moduleDB.delete(module_id)
         return '', 204
 
 
@@ -124,14 +139,20 @@ class Modules(Resource):
 
         args = request.get_json(force=True)
 
-        if not moduleDB.add(args["room"], args["status"]):
-            return "failed to add resident", 400
+        if "room" not in args:
+            return "room not set", 400
 
-        return "module added", 201
+        if "status" not in args:
+            args["status"] = "no status"
+
+        return moduleDB.add(args["room"], args["status"])
 
 
 class Resident(Resource):
     def get(self, resident_id):
+        if not residentDB.contains(resident_id):
+            return "resource not found", 404
+
         if "username" not in session:
             return "no user logged in", 401
 
@@ -141,13 +162,25 @@ class Resident(Resource):
         return residentDB.get(resident_id)
 
     def put(self, resident_id):
+        if not residentDB.contains(resident_id):
+            return "resource not found", 404
+
         if "username" not in session:
             return "no user logged in", 401
 
-        if not session.get("permissions") < PERMISSIONS["nurse"]:
+        if session.get("permissions") < PERMISSIONS["nurse"]:
             return "invalid user", 403
 
         args = request.get_json(force=True)
+
+        if "new-name" not in args:
+            args["new-name"] = None
+
+        if "new-wearable" not in args:
+            args["new-wearable"] = None
+
+        if "new-status" not in args:
+            args["new-status"] = None
 
         newInfo = residentDB.update(resident_id, args["new-name"], args["new-wearable"], args["new-status"])
         if newInfo is None:
@@ -156,13 +189,16 @@ class Resident(Resource):
         return "resident updated", 201
 
     def delete(self, resident_id):
+        if not residentDB.contains(resident_id):
+            return "resource not found", 404
+
         if "username" not in session:
             return "user not logged in", 401
 
         if session.get("permissions") < PERMISSIONS["nurse"]:
             return "invalid credentials", 403
 
-        contactDB.delete(resident_id)
+        residentDB.delete(resident_id)
         return '', 204
 
 
@@ -185,10 +221,16 @@ class Residents(Resource):
 
         args = request.get_json(force=True)
 
-        if not residentDB.add(args["name"], args["wearable"], args["status"]):
-            return "failed to add resident", 400
+        if "name" not in args:
+            return "name not set", 400
 
-        return "resident added", 201
+        if "wearable" not in args:
+            return "wearable not set", 400
+
+        if "status" not in args:
+            args["status"] = "false"
+
+        return residentDB.add(args["name"], args["wearable"], args["status"])
 
 
 class User(Resource):
