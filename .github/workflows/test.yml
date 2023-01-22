@@ -18,6 +18,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Build the stack and run
+      - name: Create .env
         working-directory: ./source
+        run: echo -en 'APP_KEY=app\nSESSION_PASS=session\nDB_PASS=db' > .env
+      
+      - name: Build the stack and run
         run: docker compose --profile test up --abort-on-container-exit --exit-code-from tests
