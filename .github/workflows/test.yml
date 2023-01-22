@@ -1,0 +1,23 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        docker-version: ["20.10.7"]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the stack and run
+        working-directory: ./source
+        run: docker compose --profile test up --abort-on-container-exit --exit-code-from tests
