@@ -1,4 +1,4 @@
-# 3881 Group Design Project - Covid Tracker
+# 3885 Group Design Project - Covid Tracker
 View the API documentation [here](https://rory652.github.io/3881-project/)
 
 How to run:
