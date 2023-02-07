@@ -50,6 +50,6 @@ jobs:
             git fetch --all &&
             git reset --hard origin/main &&
             git pull origin main &&
-            echo -e 'APP_KEY=${APP_KEY}\\nSESSION_PASS=${SESSION}\\nDB_PASS=${DB}' > .env &&
+            printf 'APP_KEY=%s\nSESSION_PASS=%s\nDB_PASS=%s' ${APP_KEY} ${SESSION} ${DB} > .env &&
             docker-compose up
           '
