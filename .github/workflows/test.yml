@@ -46,10 +46,10 @@ jobs:
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
             cd /home/ubuntu/3885-project/source &&
-            git checkout master &&
+            git checkout main &&
             git fetch --all &&
-            git reset --hard origin/master &&
-            git pull origin master &&
+            git reset --hard origin/main &&
+            git pull origin main &&
             echo -en 'APP_KEY=${APP_KEY}\nSESSION_PASS=${SESSION}\nDB_PASS=${DB}' > .env &&
             docker-compose up
           '
