@@ -45,8 +45,6 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
-          
-            #Now we have got the access of EC2 and we will start the deploy .
             cd /home/ubuntu/3885-project/source &&
             git checkout master &&
             git fetch --all &&
@@ -54,3 +52,4 @@ jobs:
             git pull origin master &&
             echo -en 'APP_KEY=${APP_KEY}\nSESSION_PASS=${SESSION}\nDB_PASS=${DB}' > .env &&
             docker-compose up
+          '
