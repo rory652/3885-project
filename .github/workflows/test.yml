@@ -51,5 +51,5 @@ jobs:
             git reset --hard origin/main &&
             git pull origin main &&
             echo -en "APP_KEY={APP_KEY}\nSESSION_PASS={SESSION}\nDB_PASS={DB}" > .env &&
-            sudo docker-compose up
+            sudo docker-compose build
           '
