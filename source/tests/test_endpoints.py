@@ -47,6 +47,35 @@ class TestContacts:
             assert r.status_code == 404
 
 
+class TestLocations:
+    class TestPost:
+        def test_locations_post_201(self):
+            r = requests.post(''.join([pytest.baseurl, "locations/"]), json={"wearable": 12345678, "coordinates": {"x": 1, "y": 2, "z": 3}},
+                              cookies=pytest.moduleSession)
+
+            json = r.json()
+            if "id" in json:
+                requests.delete(''.join([pytest.baseurl, "locations/", json["id"]]), cookies=pytest.adminSession)
+
+            assert r.status_code == 201
+
+        def test_locations_post_400(self):
+            r = requests.post(''.join([pytest.baseurl, "locations/"]), cookies=pytest.moduleSession)
+
+            assert r.status_code == 400
+
+        def test_locations_post_401(self):
+            r = requests.post(''.join([pytest.baseurl, "locations/"]), json={"wearable": 12345678, "coordinates": {"x": 1, "y": 2, "z": 3}})
+
+            assert r.status_code == 401
+
+        def test_locations_post_403(self):
+            r = requests.post(''.join([pytest.baseurl, "locations/"]), json={"wearable": 12345678, "coordinates": {"x": 1, "y": 2, "z": 3}},
+                              cookies=pytest.nurseSession)
+
+            assert r.status_code == 403
+
+
 class TestModules:
     class TestGet:
         def test_modules_get_200(self):
