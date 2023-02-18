@@ -9,6 +9,7 @@ from databases.users import Users
 from databases.contacts import Contacts
 from databases.residents import Residents
 from databases.modules import Modules
+from databases.locations import Locations
 
 load_dotenv()
 APP_KEY = getenv('APP_KEY')
@@ -35,6 +36,7 @@ server_session = Session(app)
 # Different database objects
 userDB = Users(DB_PASS)
 contactDB = Contacts(DB_PASS)
+locationDB = Locations(DB_PASS)
 residentDB = Residents(DB_PASS)
 moduleDB = Modules(DB_PASS)
 
@@ -70,6 +72,25 @@ class Contacts(Resource):
             return "invalid credentials", 403
 
         return contactDB.get()
+
+
+class Locations(Resource):
+    def post(self):
+        if "username" not in session:
+            return "user not logged in", 401
+
+        if session.get("permissions") != PERMISSIONS["module"]:
+            return "invalid credentials", 403
+
+        args = request.get_json(force=True)
+
+        if "wearable" not in args:
+            return "wearable not set", 400
+
+        if "coordinates" not in args:
+            return "coordinates not set", 400
+
+        return locationDB.add(session.get("username"), args["wearable"], str(args["coordinates"]))
 
 
 class Module(Resource):
@@ -342,6 +363,8 @@ class UserSession(Resource):
 
 api.add_resource(Contacts, '/contacts/')
 api.add_resource(Contact, '/contacts/<contact_id>')
+
+api.add_resource(Locations, '/locations/')
 
 api.add_resource(Modules, '/modules/')
 api.add_resource(Module, '/modules/<module_id>')

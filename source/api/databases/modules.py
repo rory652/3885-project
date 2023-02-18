@@ -14,10 +14,10 @@ class Modules:
             modules = []
             for key in self._db.iterator():
                 # Make it cache later?
-                modules.append({"module": key, "status": self._db[key]["status"]})
+                modules.append({"module": key, "room": self._db[key]["room"], "status": self._db[key]["status"]})
             return modules
         else:
-            return {"module": module_id, "status": self._db[module_id]["status"]}
+            return {"module": module_id, "room": self._db[module_id]["room"], "status": self._db[module_id]["status"]}
 
     def add(self, room, status='no status'):
         module_id = self.generateID()
