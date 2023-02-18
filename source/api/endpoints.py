@@ -32,6 +32,15 @@ def initialiseDB(password):
     moduleDB = modules.Modules(password)
 
 
+# Just checks if a value is set, not if the argument itself is valid
+def checkArgs(arguments, keys):
+    for key in keys:
+        if key not in arguments:
+            return f"{key} not set", 400
+
+    return False
+
+
 def validateUser(userSession, permission):
     if "username" not in userSession:
         return "user not logged in", 401
@@ -72,11 +81,8 @@ class Locations(Resource):
 
         args = request.get_json(force=True)
 
-        if "wearable" not in args:
-            return "wearable not set", 400
-
-        if "coordinates" not in args:
-            return "coordinates not set", 400
+        if toReturn := checkArgs(args, ["wearable", "coordinates"]):
+            return toReturn
 
         return locationDB.add(session.get("username"), args["wearable"], str(args["coordinates"]))
 
@@ -103,8 +109,8 @@ class Module(Resource):
 
         args = request.get_json(force=True)
 
-        if "new-status" not in args:
-            args["new-status"] = "no status"
+        if toReturn := checkArgs(args, ["new-status", "new-room"]):
+            return toReturn
 
         newInfo = moduleDB.update(module_id, args["new-status"], args["new-room"])
         if newInfo is None:
@@ -136,11 +142,8 @@ class Modules(Resource):
 
         args = request.get_json(force=True)
 
-        if "room" not in args:
-            return "room not set", 400
-
-        if "status" not in args:
-            args["status"] = "no status"
+        if toReturn := checkArgs(args, ["status", "room"]):
+            return toReturn
 
         return moduleDB.add(args["room"], args["status"])
 
@@ -164,14 +167,8 @@ class Resident(Resource):
 
         args = request.get_json(force=True)
 
-        if "new-name" not in args:
-            args["new-name"] = None
-
-        if "new-wearable" not in args:
-            args["new-wearable"] = None
-
-        if "new-status" not in args:
-            args["new-status"] = None
+        if toReturn := checkArgs(args, ["new-name", "new-wearable", "new-status"]):
+            return toReturn
 
         newInfo = residentDB.update(resident_id, args["new-name"], args["new-wearable"], args["new-status"])
         if newInfo is None:
@@ -203,14 +200,8 @@ class Residents(Resource):
 
         args = request.get_json(force=True)
 
-        if "name" not in args:
-            return "name not set", 400
-
-        if "wearable" not in args:
-            return "wearable not set", 400
-
-        if "status" not in args:
-            args["status"] = "false"
+        if toReturn := checkArgs(args, ["name", "wearable", "status"]):
+            return toReturn
 
         return residentDB.add(args["name"], args["wearable"], args["status"])
 
@@ -240,15 +231,12 @@ class User(Resource):
 
         args = request.get_json(force=True)
 
+        if toReturn := checkArgs(args, ["username", "password", "new-username", "new-password"]):
+            return toReturn
+
         # Verify that the user is legitimate
         if not userDB.verify(args["username"], args["password"]):
             return "invalid credentials", 400
-
-        if "new-username" not in args:
-            args["new-username"] = None
-
-        if "new-password" not in args:
-            args["new-password"] = None
 
         newUsername, newInfo = userDB.update(args["username"], args["new-username"], args["new-password"])
         if newInfo is None:
@@ -287,22 +275,24 @@ class Users(Resource):
     def post(self):
         args = request.get_json(force=True)
 
-        permissions = 0
-        if "permissions" in args:
-            permissions = args["permissions"]
+        if toReturn := checkArgs(args, ["username", "password", "carehome", "permissions"]):
+            return toReturn
 
-        if not userDB.add(args["username"], args["password"], permissions):
+        if not userDB.add(args["username"], args["password"], args["permissions"]):
             return "failed to add user", 400
 
         # Create a session
         session['username'] = args["username"]
-        session['permissions'] = permissions
+        session['permissions'] = args["permissions"]
         return "user added", 201
 
 
 class UserSession(Resource):
     def post(self):
         args = request.get_json(force=True)
+
+        if toReturn := checkArgs(args, ["username", "password"]):
+            return toReturn
 
         if userDB.verify(args["username"], args["password"]):
             session['username'] = args["username"]
