@@ -275,10 +275,10 @@ class Users(Resource):
     def post(self):
         args = request.get_json(force=True)
 
-        if toReturn := checkArgs(args, ["username", "password", "carehome", "permissions"]):
+        if toReturn := checkArgs(args, ["username", "password", "permissions", "carehome"]):
             return toReturn
 
-        if not userDB.add(args["username"], args["password"], args["permissions"]):
+        if not userDB.add(args["username"], args["password"], args["permissions"], args["carehome"]):
             return "failed to add user", 400
 
         # Create a session
