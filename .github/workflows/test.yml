@@ -1,0 +1,55 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        docker-version: ["20.10.7"]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create .env
+        working-directory: ./source
+        run: echo -en 'APP_KEY=app\nSESSION_PASS=session\nDB_PASS=db' > .env
+      
+      - name: Build the stack and run
+        working-directory: ./source
+        run: docker compose --profile test up --abort-on-container-exit --exit-code-from tests
+        
+        
+  Deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2 
+      - name: Deploy in EC2
+        env:
+            PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
+            HOSTNAME : ${{ secrets.HOSTNAME  }}
+            USERNAME : ${{ secrets.USERNAME  }}
+            APP_KEY : ${{ secrets.APP_KEY  }}
+            SESSION : ${{ secrets.SESSION_PASS  }}
+            DB : ${{ secrets.DB_PASS  }}
+            
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USERNAME}@${HOSTNAME} '
+            cd /home/ubuntu/3885-project/source &&
+            git checkout main &&
+            git fetch --all &&
+            git reset --hard origin/main &&
+            git pull origin main &&
+            echo -en "APP_KEY={APP_KEY}\nSESSION_PASS={SESSION}\nDB_PASS={DB}" > .env &&
+            sudo docker-compose build
+          '
