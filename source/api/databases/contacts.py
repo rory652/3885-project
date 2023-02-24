@@ -8,10 +8,11 @@ class Contacts:
     def contains(self, contact_id):
         return contact_id in self._db
 
-    def get(self):
+    def get(self, carehome):
         contacts = []
         for key in self._db.iterator():
-            contacts.append({"contact_id": key, "who": self._db[key]["who"], "test": self._db[key]["test"]})
+            if self._db[key]["carehome"] == carehome:
+                contacts.append({"contact_id": key, "who": self._db[key]["who"], "test": self._db[key]["test"], "carehome": carehome})
 
         return contacts
 

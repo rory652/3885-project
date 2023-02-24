@@ -41,22 +41,25 @@ def checkArgs(arguments, keys):
     return False
 
 
-def validateUser(userSession, permission):
+def validateUser(userSession, permission, carehome=None):
     if "username" not in userSession:
         return "user not logged in", 401
 
-    if session.get("permissions") < permission:
+    if userSession.get("permissions") < permission:
         return "invalid credentials", 403
+
+    if userSession.get("carehome") != carehome and carehome is not None:
+        return "user not a member of carehome", 403
 
     return False
 
 
 class Contact(Resource):
-    def delete(self, contact_id):
+    def delete(self, carehome, contact_id):
         if not contactDB.contains(contact_id):
             return "resource not found", 404
 
-        if toReturn := validateUser(session, PERMISSIONS["nurse"]):
+        if toReturn := validateUser(session, PERMISSIONS["nurse"], carehome):
             return toReturn
 
         contactDB.delete(contact_id)
@@ -64,40 +67,43 @@ class Contact(Resource):
 
 
 class Contacts(Resource):
-    def get(self):
-        if toReturn := validateUser(session, PERMISSIONS["nurse"]):
+    def get(self, carehome):
+        if toReturn := validateUser(session, PERMISSIONS["nurse"], carehome):
             return toReturn
 
-        return contactDB.get()
+        return contactDB.get(carehome)
 
 
 class Locations(Resource):
-    def post(self):
+    def post(self, carehome):
         if "username" not in session:
             return "user not logged in", 401
 
-        if session.get("permissions") != PERMISSIONS["module"]:
+        if not session.get("permissions") == PERMISSIONS["module"]:
             return "invalid credentials", 403
+
+        if session.get("carehome") != carehome and carehome is not None:
+            return "user not a member of carehome", 403
 
         args = request.get_json(force=True)
 
         if toReturn := checkArgs(args, ["wearable", "coordinates"]):
             return toReturn
 
-        return locationDB.add(session.get("username"), args["wearable"], str(args["coordinates"]))
+        return locationDB.add(session.get("username"), args["wearable"], str(args["coordinates"]), carehome)
 
 
 class Module(Resource):
-    def get(self, module_id):
+    def get(self, carehome, module_id):
         if not moduleDB.contains(module_id):
             return "resource not found", 404
 
-        if toReturn := validateUser(session, PERMISSIONS["admin"]):
+        if toReturn := validateUser(session, PERMISSIONS["admin"], carehome):
             return toReturn
 
-        return moduleDB.get(module_id)
+        return moduleDB.get(carehome, module_id)
 
-    def put(self, module_id):
+    def put(self, carehome, module_id):
         if not moduleDB.contains(module_id):
             return "resource not found", 404
 
@@ -107,22 +113,25 @@ class Module(Resource):
         if not session.get("permissions") == PERMISSIONS["module"]:
             return "invalid user", 403
 
+        if session.get("carehome") != carehome and carehome is not None:
+            return "user not a member of carehome", 403
+
         args = request.get_json(force=True)
 
         if toReturn := checkArgs(args, ["new-status", "new-room"]):
             return toReturn
 
-        newInfo = moduleDB.update(module_id, args["new-status"], args["new-room"])
+        newInfo = moduleDB.update(module_id, carehome, args["new-status"], args["new-room"])
         if newInfo is None:
             return "field not set", 400
 
         return newInfo, 201
 
-    def delete(self, module_id):
+    def delete(self, carehome, module_id):
         if not moduleDB.contains(module_id):
             return "resource not found", 404
 
-        if toReturn := validateUser(session, PERMISSIONS["admin"]):
+        if toReturn := validateUser(session, PERMISSIONS["admin"], carehome):
             return toReturn
 
         moduleDB.delete(module_id)
@@ -130,14 +139,14 @@ class Module(Resource):
 
 
 class Modules(Resource):
-    def get(self):
-        if toReturn := validateUser(session, PERMISSIONS["admin"]):
+    def get(self, carehome):
+        if toReturn := validateUser(session, PERMISSIONS["admin"], carehome):
             return toReturn
 
-        return moduleDB.get()
+        return moduleDB.get(carehome)
 
-    def post(self):
-        if toReturn := validateUser(session, PERMISSIONS["admin"]):
+    def post(self, carehome):
+        if toReturn := validateUser(session, PERMISSIONS["admin"], carehome):
             return toReturn
 
         args = request.get_json(force=True)
@@ -145,24 +154,24 @@ class Modules(Resource):
         if toReturn := checkArgs(args, ["status", "room"]):
             return toReturn
 
-        return moduleDB.add(args["room"], args["status"])
+        return moduleDB.add(args["room"], carehome, args["status"])
 
 
 class Resident(Resource):
-    def get(self, resident_id):
+    def get(self, carehome, resident_id):
         if not residentDB.contains(resident_id):
             return "resource not found", 404
 
-        if toReturn := validateUser(session, PERMISSIONS["nurse"]):
+        if toReturn := validateUser(session, PERMISSIONS["nurse"], carehome):
             return toReturn
 
-        return residentDB.get(resident_id)
+        return residentDB.get(carehome, resident_id)
 
-    def put(self, resident_id):
+    def put(self, carehome, resident_id):
         if not residentDB.contains(resident_id):
             return "resource not found", 404
 
-        if toReturn := validateUser(session, PERMISSIONS["nurse"]):
+        if toReturn := validateUser(session, PERMISSIONS["nurse"], carehome):
             return toReturn
 
         args = request.get_json(force=True)
@@ -170,17 +179,17 @@ class Resident(Resource):
         if toReturn := checkArgs(args, ["new-name", "new-wearable", "new-status"]):
             return toReturn
 
-        newInfo = residentDB.update(resident_id, args["new-name"], args["new-wearable"], args["new-status"])
+        newInfo = residentDB.update(resident_id, carehome, args["new-name"], args["new-wearable"], args["new-status"])
         if newInfo is None:
             return "field not set", 400
 
         return "resident updated", 201
 
-    def delete(self, resident_id):
+    def delete(self, carehome, resident_id):
         if not residentDB.contains(resident_id):
             return "resource not found", 404
 
-        if toReturn := validateUser(session, PERMISSIONS["nurse"]):
+        if toReturn := validateUser(session, PERMISSIONS["nurse"], carehome):
             return toReturn
 
         residentDB.delete(resident_id)
@@ -188,14 +197,14 @@ class Resident(Resource):
 
 
 class Residents(Resource):
-    def get(self):
-        if toReturn := validateUser(session, PERMISSIONS["nurse"]):
+    def get(self, carehome):
+        if toReturn := validateUser(session, PERMISSIONS["nurse"], carehome):
             return toReturn
 
-        return residentDB.get()
+        return residentDB.get(carehome)
 
-    def post(self):
-        if toReturn := validateUser(session, PERMISSIONS["nurse"]):
+    def post(self, carehome):
+        if toReturn := validateUser(session, PERMISSIONS["nurse"], carehome):
             return toReturn
 
         args = request.get_json(force=True)
@@ -203,7 +212,7 @@ class Residents(Resource):
         if toReturn := checkArgs(args, ["name", "wearable", "status"]):
             return toReturn
 
-        return residentDB.add(args["name"], args["wearable"], args["status"])
+        return residentDB.add(args["name"], args["wearable"], carehome, args["status"])
 
 
 class User(Resource):
@@ -275,7 +284,7 @@ class Users(Resource):
     def post(self):
         args = request.get_json(force=True)
 
-        if toReturn := checkArgs(args, ["username", "password", "permissions", "carehome"]):
+        if toReturn := checkArgs(args, ["username", "password", "carehome", "permissions"]):
             return toReturn
 
         if not userDB.add(args["username"], args["password"], args["permissions"], args["carehome"]):
@@ -284,6 +293,8 @@ class Users(Resource):
         # Create a session
         session['username'] = args["username"]
         session['permissions'] = args["permissions"]
+        session['carehome'] = args["carehome"]
+
         return "user added", 201
 
 
@@ -297,13 +308,22 @@ class UserSession(Resource):
         if userDB.verify(args["username"], args["password"]):
             session['username'] = args["username"]
             session['permissions'] = userDB.get(args["username"])["permissions"]
+            session['carehome'] = userDB.get(args["username"])["carehome"]
 
             return "session created", 201
 
         return "invalid login credentials", 400
 
     def delete(self):
-        session.pop('username', default=None)
-        session.pop('permissions', default=None)
+        args = request.get_json(force=True)
 
-        return '', 204
+        if toReturn := checkArgs(args, ["username", "password"]):
+            return toReturn
+
+        if userDB.verify(args["username"], args["password"]):
+            session.pop('username', default=None)
+            session.pop('permissions', default=None)
+            session.pop('carehome', default=None)
+
+            return '', 204
+        return "invalid login credentials", 400

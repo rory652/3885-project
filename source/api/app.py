@@ -31,16 +31,16 @@ app.config['SESSION_REDIS'] = redis.Redis(host="session", port=6379, password=SE
 # Create and initialize the Flask-Session object AFTER `app` has been configured
 server_session = Session(app)
 
-api.add_resource(EP.Contacts, '/contacts/')
-api.add_resource(EP.Contact, '/contacts/<contact_id>')
+api.add_resource(EP.Contacts, '/contacts/<carehome>')
+api.add_resource(EP.Contact, '/contacts/<carehome>/<contact_id>')
 
-api.add_resource(EP.Locations, '/locations/')
+api.add_resource(EP.Locations, '/locations/<carehome>')
 
-api.add_resource(EP.Modules, '/modules/')
-api.add_resource(EP.Module, '/modules/<module_id>')
+api.add_resource(EP.Modules, '/modules/<carehome>')
+api.add_resource(EP.Module, '/modules/<carehome>/<module_id>')
 
-api.add_resource(EP.Residents, '/residents/')
-api.add_resource(EP.Resident, '/residents/<resident_id>')
+api.add_resource(EP.Residents, '/residents/<carehome>')
+api.add_resource(EP.Resident, '/residents/<carehome>/<resident_id>')
 
 api.add_resource(EP.Users, '/users/')
 api.add_resource(EP.User, '/users/<username>')
