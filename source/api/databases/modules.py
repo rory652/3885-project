@@ -9,34 +9,39 @@ class Modules:
     def contains(self, module_id):
         return module_id in self._db
 
-    def get(self, module_id=None):
+    def get(self, carehome, module_id=None):
         if module_id is None:
             modules = []
             for key in self._db.iterator():
-                # Make it cache later?
-                modules.append({"module": key, "room": self._db[key]["room"], "status": self._db[key]["status"]})
+                if self._db[key]["carehome"] == carehome:
+                    modules.append({"module": key, "room": self._db[key]["room"], "status": self._db[key]["status"]})
             return modules
         else:
-            return {"module": module_id, "room": self._db[module_id]["room"], "status": self._db[module_id]["status"]}
+            if self._db[module_id]["carehome"] == carehome:
+                return {"module": module_id, "room": self._db[module_id]["room"], "status": self._db[module_id]["status"]}
+            return "user not part of carehome", 403
 
-    def add(self, room, status='no status'):
+    def add(self, room, carehome, status='no status'):
         module_id = self.generateID()
 
-        self._db[module_id] = {"room": room, "status": status}
+        self._db[module_id] = {"room": room, "status": status, "carehome": carehome}
 
         return {"id": module_id, "data": self._db[module_id]}, 201
 
     def delete(self, module_id):
         del self._db[module_id]
 
-    def update(self, module_id, newStatus, newRoom=None):
+    def update(self, module_id, carehome, newStatus, newRoom=None):
+        if not self._db[module_id]["carehome"] == carehome:
+            return "user not part of carehome", 403
+
         if newRoom is not None:
             # 'no status' = default status for new modules
-            self._db[module_id] = {"room": newRoom, "status": 'no status'}
+            self._db[module_id] = {"room": newRoom, "status": 'no status', "carehome": carehome}
 
             return self._db[module_id]
 
-        self._db[module_id] = {"room": self._db[module_id]["room"], "status": newStatus}
+        self._db[module_id] = {"room": self._db[module_id]["room"], "status": newStatus, "carehome": carehome}
 
         return self._db[module_id]
 

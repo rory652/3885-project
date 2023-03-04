@@ -23,7 +23,7 @@ class Users:
         else:
             return {"username": username, "permissions": self._db[username]["permissions"]}
 
-    def add(self, username, password, permissions=0):
+    def add(self, username, password, carehome, permissions=0):
         # Username must be unique
         if username in self._db:
             return False
@@ -31,7 +31,7 @@ class Users:
         salt = self.generate_salt()
         passHash = self.hash(password, salt)
 
-        self._db[username] = {"hash": passHash, "salt": salt, "permissions": permissions}
+        self._db[username] = {"hash": passHash, "salt": salt, "carehome": carehome, "permissions": permissions}
 
         return True
 

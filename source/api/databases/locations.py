@@ -9,10 +9,10 @@ class Locations:
     def contains(self, location_id):
         return location_id in self._db
 
-    def add(self, module, wearable, coordinates):
+    def add(self, module, wearable, coordinates, carehome):
         location_id = self.generateID()
 
-        self._db[location_id] = {"module": module, "wearable": wearable, "coordinates": coordinates}
+        self._db[location_id] = {"module": module, "wearable": wearable, "coordinates": coordinates, "carehome": carehome}
 
         return {"id": location_id, "data": self._db[location_id]}, 201
 

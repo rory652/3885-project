@@ -9,33 +9,35 @@ class Residents:
     def contains(self, resident_id):
         return resident_id in self._db
 
-    def get(self, resident_id=None):
+    def get(self, carehome, resident_id=None):
         if resident_id is None:
             residents = []
             for key in self._db.iterator():
-                # Make it cache later?
-                resident = self._db[key]
-                residents.append({"resident": key, "name": resident["name"],
-                                  "wearable": resident["wearable"], "covid": resident["covid"]})
+                if self._db[key]["carehome"] == carehome:
+                    resident = self._db[key]
+                    residents.append({"resident": key, "name": resident["name"], "carehome": resident["carehome"],
+                                      "wearable": resident["wearable"], "covid": resident["covid"]})
             return residents
         else:
-            resident = self._db[resident_id]
-            return {"resident": resident_id, "name": resident["name"],
-                    "wearable": resident["wearable"], "covid": resident["covid"]}
+            if self._db[resident_id]["carehome"] == carehome:
+                resident = self._db[resident_id]
+                return {"resident": resident_id, "name": resident["name"],
+                        "wearable": resident["wearable"], "covid": resident["covid"]}
+            return "user not part of carehome", 403
 
-    def add(self, name, wearable, covid="false"):
+    def add(self, name, wearable, carehome, covid="false"):
         resident_id = self.generateID()
 
-        self._db[resident_id] = {"name": name, "wearable": wearable, "covid": covid}
+        self._db[resident_id] = {"name": name, "carehome": carehome, "wearable": wearable, "covid": covid}
 
-        return {"id": resident_id, "name": name, "wearable": wearable, "covid": covid}, 201
+        return {"id": resident_id, "name": name, "carehome": carehome, "wearable": wearable, "covid": covid}, 201
 
     def delete(self, resident_id):
         del self._db[resident_id]
 
-    def update(self, resident_id, newName=None, newWearable=None, newStatus=None):
-        if newName is None and newWearable is None and newWearable is newStatus:
-            return None
+    def update(self, resident_id, carehome, newName=None, newWearable=None, newStatus=None):
+        if not self._db[resident_id]["carehome"] == carehome:
+            return "user not part of carehome", 403
 
         oldInfo = self._db[resident_id]
 
@@ -48,7 +50,7 @@ class Residents:
         if newStatus is None:
             newStatus = oldInfo["covid"]
 
-        self._db[resident_id] = {"name": newName, "wearable": newWearable, "covid": newStatus}
+        self._db[resident_id] = {"name": newName, "carehome": carehome, "wearable": newWearable, "covid": newStatus}
 
         return self._db[resident_id]
 
