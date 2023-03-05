@@ -11,13 +11,13 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'headers': {},
         'body': json.dumps({
-            'database-status': deleteModule(path["carehomeId"], path["username"])["ResponseMetadata"]["HTTPStatusCode"]
+            'database-status': delete(path["carehomeId"], path["username"])["ResponseMetadata"]["HTTPStatusCode"]
         }),
         "isBase64Encoded": False,
     }
 
 
-def deleteModule(carehome, username):
+def delete(carehome, username):
     response = table.delete_item(
         Key={
             'carehome': carehome,
