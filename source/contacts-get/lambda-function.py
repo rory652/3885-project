@@ -10,13 +10,13 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'headers': {},
         'body': json.dumps({
-            'contacts': fetchContacts(event["pathParameters"]["carehomeId"])
+            'contacts': fetch(event["pathParameters"]["carehomeId"])
         }),
         "isBase64Encoded": False,
     }
 
 
-def fetchContacts(carehome):
+def fetch(carehome):
     response = table.query(
         KeyConditionExpression=Key('carehome').eq(carehome)
     )
