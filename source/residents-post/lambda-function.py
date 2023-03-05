@@ -66,8 +66,6 @@ def generateId(carehome):
             KeyConditionExpression=Key('carehome').eq(carehome) & Key('id').eq(generated)
         )
 
-        print(response)
-
         if len(response["Items"]) == 0:
             valid = True
         else:
