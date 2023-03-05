@@ -73,5 +73,4 @@ def generateId(carehome):
         else:
             generated = token_hex(8)
 
-    print(generated)
     return generated
