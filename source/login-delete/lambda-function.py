@@ -1,11 +1,25 @@
-import boto3
+import json, boto3
 
-client = boto3.client('dynamodb')
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('sessions')
 
 
 def lambda_handler(event, context):
     return {
         'statusCode': 200,
-        'endpoint': 'login',
-        'request': 'DELETE'
+        'headers': {},
+        'body': json.dumps({
+            'database-status': delete(event["headers"]["SESSION-ID"])["ResponseMetadata"]["HTTPStatusCode"]
+        }),
+        "isBase64Encoded": False,
     }
+
+
+def delete(session):
+    response = table.delete_item(
+        Key={
+            'id': session,
+        }
+    )
+
+    return response
