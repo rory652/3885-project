@@ -21,7 +21,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: authorizer
-          source: source/authorizer/function.py
+          source: source/authorizer/lambda-function.py
       - name: deploy contacts-delete
         uses: appleboy/lambda-action@master
         with:
@@ -29,4 +29,4 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: contacts-delete
-          source: source/contacts-delete/function.py
+          source: source/contacts-delete/lambda-function.py
