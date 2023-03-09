@@ -22,7 +22,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: authorizer
-          source: source/authorizer/lambda-function.py
+          source: source/authorizer/lambda_function.py
 
       - name: deploy contacts-delete
         uses: appleboy/lambda-action@master
@@ -31,7 +31,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: contacts-delete
-          source: source/contacts-delete/lambda-function.py
+          source: source/contacts-delete/lambda_function.py
       - name: deploy contacts-get
         uses: appleboy/lambda-action@master
         with:
@@ -39,7 +39,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: contacts-get
-          source: source/contacts-get/lambda-function.py
+          source: source/contacts-get/lambda_function.py
 
       - name: deploy locations-post
         uses: appleboy/lambda-action@master
@@ -48,7 +48,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: locations-post
-          source: source/locations-post/lambda-function.py
+          source: source/locations-post/lambda_function.py
 
       - name: deploy login-delete
         uses: appleboy/lambda-action@master
@@ -57,7 +57,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: login-delete
-          source: source/login-delete/lambda-function.py
+          source: source/login-delete/lambda_function.py
       - name: deploy login-delete
         uses: appleboy/lambda-action@master
         with:
@@ -65,7 +65,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: login-post
-          source: source/login-post/lambda-function.py
+          source: source/login-post/lambda_function.py
 
       - name: deploy module-delete
         uses: appleboy/lambda-action@master
@@ -74,7 +74,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: module-delete
-          source: source/module-delete/lambda-function.py
+          source: source/module-delete/lambda_function.py
       - name: deploy module-get
         uses: appleboy/lambda-action@master
         with:
@@ -82,7 +82,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: module-get
-          source: source/module-get/lambda-function.py
+          source: source/module-get/lambda_function.py
       - name: deploy module-put
         uses: appleboy/lambda-action@master
         with:
@@ -90,7 +90,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: module-put
-          source: source/module-put/lambda-function.py
+          source: source/module-put/lambda_function.py
       - name: deploy modules-get
         uses: appleboy/lambda-action@master
         with:
@@ -98,7 +98,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: modules-get
-          source: source/modules-get/lambda-function.py
+          source: source/modules-get/lambda_function.py
       - name: deploy modules-post
         uses: appleboy/lambda-action@master
         with:
@@ -106,7 +106,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: modules-post
-          source: source/modules-post/lambda-function.py
+          source: source/modules-post/lambda_function.py
 
       - name: deploy resident-delete
         uses: appleboy/lambda-action@master
@@ -115,7 +115,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: resident-delete
-          source: source/resident-delete/lambda-function.py
+          source: source/resident-delete/lambda_function.py
       - name: deploy resident-get
         uses: appleboy/lambda-action@master
         with:
@@ -123,7 +123,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: resident-get
-          source: source/resident-get/lambda-function.py
+          source: source/resident-get/lambda_function.py
       - name: deploy resident-put
         uses: appleboy/lambda-action@master
         with:
@@ -131,7 +131,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: resident-put
-          source: source/resident-put/lambda-function.py
+          source: source/resident-put/lambda_function.py
       - name: deploy residents-get
         uses: appleboy/lambda-action@master
         with:
@@ -139,7 +139,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: residents-get
-          source: source/residents-get/lambda-function.py
+          source: source/residents-get/lambda_function.py
       - name: deploy residents-post
         uses: appleboy/lambda-action@master
         with:
@@ -147,7 +147,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: residents-post
-          source: source/residents-post/lambda-function.py
+          source: source/residents-post/lambda_function.py
 
       - name: deploy user-delete
         uses: appleboy/lambda-action@master
@@ -156,7 +156,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: user-delete
-          source: source/user-delete/lambda-function.py
+          source: source/user-delete/lambda_function.py
       - name: deploy user-get
         uses: appleboy/lambda-action@master
         with:
@@ -164,7 +164,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: user-get
-          source: source/user-get/lambda-function.py
+          source: source/user-get/lambda_function.py
       - name: deploy user-put
         uses: appleboy/lambda-action@master
         with:
@@ -172,7 +172,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: user-put
-          source: source/user-put/lambda-function.py
+          source: source/user-put/lambda_function.py
       - name: deploy users-get
         uses: appleboy/lambda-action@master
         with:
@@ -180,7 +180,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: users-get
-          source: source/users-get/lambda-function.py
+          source: source/users-get/lambda_function.py
       - name: deploy users-delete
         uses: appleboy/lambda-action@master
         with:
@@ -188,4 +188,4 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-east-1
           function_name: users-post
-          source: source/users-post/lambda-function.py
+          source: source/users-post/lambda_function.py
