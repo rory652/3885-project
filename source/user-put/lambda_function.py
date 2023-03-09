@@ -24,14 +24,15 @@ def generateAttributes(**attributes):
 
 def lambda_handler(event, context):
     carehome = event["pathParameters"]["carehomeId"]
-    if type(carehome) != str:
+
+    if not isinstance(carehome, str):
         carehome = str(carehome)
 
     username = event["pathParameters"]["username"]
 
     try:
         body = event["body"]
-        if type(event["body"]) == str:
+        if isinstance(body, str):
             body = json.loads(body)
 
         new_username = body["new_username"]

@@ -18,12 +18,12 @@ def generateItem(carehome, id, moduleId, location):
 def lambda_handler(event, context):
     carehome = event["pathParameters"]["carehomeId"]
 
-    if type(carehome) != str:
+    if not isinstance(carehome, str):
         carehome = str(carehome)
 
     try:
         body = event["body"]
-        if type(event["body"]) == str:
+        if isinstance(body, str):
             body = json.loads(body)
 
         moduleId = body["moduleId"]
