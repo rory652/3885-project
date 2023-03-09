@@ -17,7 +17,9 @@ def generateItem(carehome, session, username, role):
     }
 
 
-def generateResponse(status, body, headers={}):
+def generateResponse(status, body, headers=None):
+    if headers is None:
+        headers = {}
     return {
         'statusCode': status,
         'headers': headers,
