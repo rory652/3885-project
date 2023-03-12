@@ -11,7 +11,7 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'headers': {},
         'body': json.dumps({
-            'modules': fetch(path["carehomeId"], path["username"])
+            'user': fetch(path["carehomeId"], path["username"])
         }),
         "isBase64Encoded": False,
     }
@@ -19,7 +19,7 @@ def lambda_handler(event, context):
 
 def fetch(carehome, username):
     response = table.query(
-        KeyConditionExpression=Key('carehome').eq(carehome) & Key('id').eq(username)
+        KeyConditionExpression=Key('carehome').eq(carehome) & Key('username').eq(username)
     )
 
-    return response["Items"]
+    return {key: response["Items"][0][key] for key in ["username", "carehome", "role"]}

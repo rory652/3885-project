@@ -21,4 +21,4 @@ def fetch(carehome):
         KeyConditionExpression=Key('carehome').eq(carehome)
     )
 
-    return response["Items"]
+    return [{key: user[key] for key in ["username", "carehome", "role"]} for user in response["Items"]]
