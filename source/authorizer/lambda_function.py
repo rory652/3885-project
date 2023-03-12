@@ -11,11 +11,11 @@ def lambda_handler(event, context):
     except KeyError:
         return generatePolicy("", "Deny", resource)
 
-    # Get session
-    session = getSession(sessionId)
-
     # Parse resource URI
-    request, endpoint, carehome, extra = parseResource(resource)
+    request, endpoint, carehome = parseResource(resource)
+
+    # Get session
+    session = getSession(carehome, sessionId)
 
     # Check session exists
     if "Item" not in session:
@@ -26,7 +26,7 @@ def lambda_handler(event, context):
         return generatePolicy(session, "Deny", resource)
 
     # Check Permissions
-    if session["Item"]["role"]["S"] != getRole(request, endpoint, extra):
+    if session["Item"]["role"]["S"] != getRole(request, endpoint):
         return generatePolicy(session, "Deny", resource)
 
     return generatePolicy(sessionId, "Allow", resource)
@@ -39,22 +39,37 @@ def parseResource(resource):
     request = temp[0]
     endpoint = temp[1]
     carehome = temp[2]
-    extra = True if len(temp) == 4 and temp[3] != "" else False
+    extra = "-extra" if len(temp) == 4 and temp[3] != "" else ""
 
-    return request, endpoint, carehome, extra
+    endpoint = endpoint + extra
+
+    return request, endpoint, carehome
 
 
-def getSession(sessionId):
+def getSession(carehome, sessionId):
     return client.get_item(
         TableName='sessions',
         Key={
+            'carehome': {'S': carehome},
             'id': {'S': sessionId}
         }
     )
 
 
-def getRole(request, endpoint, extra):
-    return "nurse"
+def getRole(request, endpoint):
+    response = client.get_item(
+        TableName='endpoints',
+        Key={
+            'endpoint': {'S': endpoint},
+            'method': {'S': request},
+        }
+    )
+
+    if "Item" in response:
+        return response["Item"]["role"]["S"]
+
+    # Should never happen but just in case
+    return "invalid endpoint"
 
 
 def generatePolicy(sessionId, effect, resource):
