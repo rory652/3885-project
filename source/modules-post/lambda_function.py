@@ -1,6 +1,7 @@
 import json, boto3
 from boto3.dynamodb.conditions import Key
 from secrets import token_hex
+from hashlib import sha256
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('modules')
@@ -68,4 +69,4 @@ def generateId(carehome):
         else:
             generated = token_hex(8)
 
-    return generated
+    return sha256(generated.encode()).hexdigest()
