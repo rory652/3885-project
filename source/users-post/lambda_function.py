@@ -5,6 +5,7 @@ from secrets import token_hex
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('users')
+carehomes = dynamodb.Table('carehomes')
 
 
 def generateItem(carehome, username, password, role, salt):
@@ -30,7 +31,7 @@ def lambda_handler(event, context):
 
         username = body["username"]
         password = body["password"]
-        role = body["role"]
+        code = body["code"]
     except KeyError as err:
         return {
             'statusCode': 400,
@@ -42,6 +43,17 @@ def lambda_handler(event, context):
         }
 
     # Validate inputs here
+    role = validateCode(carehome, code)
+    if not role:
+        return {
+            'statusCode': 400,
+            'headers': {},
+            'body': json.dumps({
+                'error': f'invalid carehome/role code'
+            }),
+            "isBase64Encoded": False,
+        }
+
     if not validateUsername(carehome, username):
         return {
             'statusCode': 400,
@@ -64,6 +76,24 @@ def lambda_handler(event, context):
         }),
         "isBase64Encoded": False,
     }
+
+
+def validateCode(carehome, code):
+    response = carehomes.query(
+        KeyConditionExpression=Key('id').eq(carehome)
+    )
+
+    if not response["Items"]:
+        return False
+
+    hashed = sha256(code.encode()).hexdigest()
+
+    if hashed == response["Items"][0]["nurse-code"]:
+        return "nurse"
+    elif hashed == response["Items"][0]["admin-code"]:
+        return "admin"
+    else:
+        return False
 
 
 def validateUsername(carehome, username):
