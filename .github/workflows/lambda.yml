@@ -40,6 +40,15 @@ jobs:
           function_name: location-processor
           source: source/location-processor/lambda_function.py
 
+      - name: deploy carehomes-post
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
+          function_name: carehomes-post
+          source: source/carehomes-post/lambda_function.py
+
       - name: deploy contacts-delete
         uses: appleboy/lambda-action@master
         with:
