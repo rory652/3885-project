@@ -1,0 +1,1345 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "jerb-tracker-api",
+    "description": "The API for the JERB Tracker Back-end",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/RORYCOE652/jerb-tracker/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "paths": {
+    "/contacts/{carehomeId}": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetches contacts - Nurse",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Contacts"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts/{carehomeId}/{contactId}": {
+      "delete": {
+        "tags": [
+          "Contacts"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contactId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletes contact - Nurse",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/204Response"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locations/{carehomeId}": {
+      "post": {
+        "tags": [
+          "Locations"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MODULE-SECRET",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON object containing the Location data for each resident",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationPostRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Adds location - Module",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/201Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modules/{carehomeId}": {
+      "get": {
+        "tags": [
+          "Modules"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetches modules - Admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Modules"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Modules"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON object containing the Room and initial Status",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModulePostRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Adds module - Admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/201Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modules/{carehomeId}/{moduleId}": {
+      "get": {
+        "tags": [
+          "Modules"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "moduleId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetches module - Admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Modules"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Modules"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "moduleId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON object containing the new Status and/or Room",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModulePutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Updates module - Admin/Module",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/201Response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Modules"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "moduleId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletes module - Admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/204Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/residents/{carehomeId}": {
+      "get": {
+        "tags": [
+          "Residents"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetches residents - Nurse",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Residents"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Residents"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON object containing the Name, Wearable and Status",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResidentPostRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Adds resident - Nurse",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/201Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/residents/{carehomeId}/{residentId}": {
+      "get": {
+        "tags": [
+          "Residents"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "residentId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetches resident - Nurse",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Residents"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Residents"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "residentId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON object containing the new Name and/or Wearable",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResidentPutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Updates resident - Nurse",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/201Response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Residents"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "residentId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletes resident - Nurse",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/204Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{carehomeId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetches users - Admin",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Users"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON object containing the Username, Password, Name and Role",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPostRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Adds user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/201Response"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/users/{carehomeId}/{username}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fetches user - User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON object containing the new Username and/or Password",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Updates user - User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/201Response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SESSION-ID",
+            "in": "header",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletes user - User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/204Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login/{carehomeId}": {
+      "post": {
+        "tags": [
+          "Login"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON object containing the Username and Password",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Creates session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/201Response"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "delete": {
+        "tags": [
+          "Login"
+        ],
+        "parameters": [
+          {
+            "name": "carehomeId",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletes session (log out) - User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/204Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Contacts": {
+        "required": [
+          "healthy-resident",
+          "id",
+          "infected-resident",
+          "timestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the contact",
+            "example": "12345678"
+          },
+          "infectedResident": {
+            "type": "string",
+            "description": "The unique identifier for the infected resident",
+            "example": "b87ca54f"
+          },
+          "healthyResident": {
+            "type": "string",
+            "description": "The unique identifier for the infected resident",
+            "example": "4058f2ec"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "The timestamp when the contact was deteced",
+            "format": "date-time"
+          }
+        }
+      },
+      "LocationPostRequest": {
+        "required": [
+          "location",
+          "moduleId",
+          "resident"
+        ],
+        "type": "object",
+        "properties": {
+          "moduleId": {
+            "type": "string",
+            "description": "The unique identifier for the module",
+            "example": "12345678"
+          },
+          "wearable": {
+            "type": "string",
+            "description": "The unique identifier for the wearable",
+            "example": "b87ca54f"
+          },
+          "location": {
+            "type": "string",
+            "description": "String containing location data",
+            "example": "156,123,093"
+          }
+        }
+      },
+      "Modules": {
+        "required": [
+          "carehome",
+          "id",
+          "room",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the module",
+            "example": "12345678"
+          },
+          "room": {
+            "type": "string",
+            "description": "Room the module is in",
+            "example": "Living Room"
+          },
+          "status": {
+            "type": "string",
+            "description": "Module's status",
+            "example": "Fully Operational"
+          },
+          "carehome": {
+            "type": "string",
+            "description": "The unique identifier for the carehome",
+            "example": "12345678"
+          }
+        }
+      },
+      "ModulePostRequest": {
+        "required": [
+          "id",
+          "room",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the module",
+            "example": "12345678"
+          },
+          "room": {
+            "type": "string",
+            "description": "Room the module is in",
+            "example": "Living Room"
+          },
+          "status": {
+            "type": "string",
+            "description": "Module's status",
+            "example": "Fully Operational"
+          }
+        }
+      },
+      "ModulePutRequest": {
+        "type": "object",
+        "properties": {
+          "new_room": {
+            "type": "string",
+            "description": "The new room the module is in",
+            "example": "Living Room"
+          },
+          "new_status": {
+            "type": "string",
+            "description": "Module's new status",
+            "example": "Fully Operational"
+          }
+        }
+      },
+      "Residents": {
+        "required": [
+          "carehome",
+          "id",
+          "name",
+          "status",
+          "wearable"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the resident",
+            "example": "12345678"
+          },
+          "name": {
+            "type": "string",
+            "description": "Resident's name",
+            "example": "John Smith"
+          },
+          "status": {
+            "type": "boolean",
+            "description": "Whether the patient has covid",
+            "example": false
+          },
+          "wearable": {
+            "type": "string",
+            "description": "The unique identifier for the wearable",
+            "example": "87654321"
+          },
+          "carehome": {
+            "type": "string",
+            "description": "The unique identifier for the carehome",
+            "example": "12345678"
+          }
+        }
+      },
+      "ResidentPostRequest": {
+        "required": [
+          "name",
+          "status",
+          "wearable"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Resident's name",
+            "example": "John Smith"
+          },
+          "status": {
+            "type": "boolean",
+            "description": "Whether the patient has covid",
+            "example": false
+          },
+          "wearable": {
+            "type": "string",
+            "description": "The unique identifier for the wearable",
+            "example": "87654321"
+          }
+        }
+      },
+      "ResidentPutRequest": {
+        "type": "object",
+        "properties": {
+          "new_name": {
+            "type": "string",
+            "description": "Resident's new name",
+            "example": "Jonathon Smith"
+          },
+          "new_status": {
+            "type": "boolean",
+            "description": "Resident's new covid status",
+            "example": false
+          },
+          "new_wearable": {
+            "type": "string",
+            "description": "The unique identifier for the new wearable",
+            "example": "65200256"
+          }
+        }
+      },
+      "Users": {
+        "required": [
+          "carehome",
+          "name",
+          "role",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "The unique username for the user",
+            "example": "emmaOwen1983"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Emma Owen"
+          },
+          "role": {
+            "type": "string",
+            "description": "User's role",
+            "example": "Nurse"
+          },
+          "carehome": {
+            "type": "string",
+            "description": "The unique identifier for the carehome",
+            "example": "12345678"
+          }
+        }
+      },
+      "UserPostRequest": {
+        "required": [
+          "carehome-code",
+          "name",
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "The unique username for the user",
+            "example": "emmaOwen1983"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "superSecurePassword"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Emma Owen"
+          },
+          "carehome-code": {
+            "type": "string",
+            "description": "Invitation code for the carehome",
+            "example": "12345678"
+          }
+        }
+      },
+      "UserPutRequest": {
+        "type": "object",
+        "properties": {
+          "new_username": {
+            "type": "string",
+            "description": "The new unique username for the user",
+            "example": "emma-owen"
+          },
+          "new_password": {
+            "type": "string",
+            "description": "User's new password",
+            "example": "newSuperSecurePassword"
+          }
+        }
+      },
+      "LoginRequest": {
+        "required": [
+          "password",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "User's username",
+            "example": "rory652"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "securePassword"
+          }
+        }
+      },
+      "201Response": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "example": 201
+          },
+          "message": {
+            "type": "string",
+            "example": "entry added"
+          }
+        }
+      },
+      "204Response": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "example": 204
+          },
+          "message": {
+            "type": "string",
+            "example": "entry deleted"
+          }
+        }
+      }
+    }
+  }
+}
