@@ -31,6 +31,14 @@ jobs:
           aws_region: us-east-1
           function_name: module-authorizer
           source: source/module-authorizer/lambda_function.py
+      - name: deploy user-authorizer
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-1
+          function_name: user-authorizer
+          source: source/user-authorizer/lambda_function.py
       - name: deploy location-processor
         uses: appleboy/lambda-action@master
         with:
