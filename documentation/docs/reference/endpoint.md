@@ -24,6 +24,12 @@ This section focuses on endpoints related to the user experience, this includes 
             ]
         }
         ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
     ??? failure "Failed Request - Status Code 403"
         ``` json
         {
@@ -56,7 +62,7 @@ This section focuses on endpoints related to the user experience, this includes 
     ??? failure "Failed Request - Status Code 400"
         ``` json
         {
-            "error": "The field `password` was not filled correctly - must contain..."
+            "error": "The field `password` was filled incorrectly - must contain..."
         }
         ```
 ### {{ site }}users/<user-id\>
@@ -79,10 +85,22 @@ This section focuses on endpoints related to the user experience, this includes 
             "care-home": "Barnaby's Home for the Senile"
         }
         ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
     ??? failure "Failed Request - Status Code 403"
         ``` json
         {
             "error": "Only user can access this resource"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 404"
+        ``` json
+        {
+            "error": "Resource not found"
         }
         ```
 === "PUT"
@@ -109,7 +127,13 @@ This section focuses on endpoints related to the user experience, this includes 
     ??? failure "Failed Request - Status Code 400"
         ``` json
         {
-            "error": "User not found" OR "One of the optional fields must be set"
+            "error": "One of the optional fields must be set"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 404"
+        ``` json
+        {
+            "error": "User not found"
         }
         ```
 === "DELETE"
@@ -123,7 +147,7 @@ This section focuses on endpoints related to the user experience, this includes 
         | `password` |   Body   | String |        Password         |
     ???+ success "Successful Request - Status Code 204"
         No body is returned
-    ??? failure "Failed Request - Status Code 403"
+    ??? failure "Failed Request - Status Code 401"
         ``` json
         {
             "error": "Invalid credentials - request must contain user information"
@@ -170,8 +194,6 @@ This section focuses on endpoints related to the user experience, this includes 
         ```
         No body is returned
     ??? failure "Failed Request - 400"
-        !!! warning "Security Concern"
-            Important not to tell the user that the session ID failed as this would allow them to brute force to find valid session IDs.
         ``` json
         {
             "error": "Logout failed"
@@ -197,6 +219,12 @@ The endpoints in this section will allow users to view the residents within thei
                 {"name": "Joanne", "wearable": 123456, "covid": True},
                 {"name": "Elliot", "wearable": 654321, "covid": False}
             ]
+        }
+        ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
         }
         ```
     ??? failure "Failed Request - Status Code 403"
@@ -229,6 +257,18 @@ The endpoints in this section will allow users to view the residents within thei
             "error": "Invalid details entered"
         }
         ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 403"
+        ``` json
+        {
+            "error": "Unauthorised user"
+        }
+        ```
 ### {{ site }}residents/<resident-id\>
 === "GET"
     !!! info "Usage"
@@ -247,6 +287,18 @@ The endpoints in this section will allow users to view the residents within thei
             "covid": True
         }
         ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 403"
+        ``` json
+        {
+            "error": "Unauthorized user"
+        }
+        ```
     ??? failure "Failed Request - Status Code 404"
         ``` json
         {
@@ -258,6 +310,7 @@ The endpoints in this section will allow users to view the residents within thei
         Updates a user's information, only one of the optional fields needs to be set. Only nurses can use this. Allows updating of the residents covid status
         !!! warning "Nurse Only"
             This endpoint can only be accessed by the nurses in the care home, any other users requesting this endpoint will fail.
+
         |     Field      | Location |  Type   |        Description         |
         |:--------------:|:--------:|:-------:|:--------------------------:|
         |     `auth`     | Cookies  | String  |  Session ID for the user   |
@@ -276,6 +329,24 @@ The endpoints in this section will allow users to view the residents within thei
             "error": "At least one of the optional fields must be provided"
         }
         ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 403"
+        ``` json
+        {
+            "error": "Unauthorized user"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 404"
+        ``` json
+        {
+            "error": "Resident not found"
+        }
+        ```
 === "DELETE"
     !!! info "Usage"
         Removes a resident from the system.
@@ -287,6 +358,18 @@ The endpoints in this section will allow users to view the residents within thei
             This endpoint can only be accessed by the nurses in the care home, any other users requesting this endpoint will fail.
     ???+ success "Successful Request - Status Code 204"
         No body is returned
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 403"
+        ``` json
+        {
+            "error": "Unauthorized user"
+        }
+        ```
     ??? failure "Failed Request - 404"
         ``` json
         {
@@ -314,10 +397,16 @@ This is where users can find information related to contacts between residents. 
             ]
         }
         ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
     ??? failure "Failed Request - Status Code 403"
         ``` json
         {
-            "error": "Invalid User"
+            "error": "Unauthorized user"
         }
         ```
 ### {{ site }}contacts/<contact-id\>
@@ -329,6 +418,18 @@ This is where users can find information related to contacts between residents. 
         | `auth` |  Cookies | String | Session ID for the user  |
     ???+ success "Successful Request - Status Code 204"
         No body is returned.
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 403"
+        ``` json
+        {
+            "error": "Unauthorized user"
+        }
+        ```
     ??? failure "Failed Request - Status Code 404"
         ``` json
         {
@@ -342,11 +443,12 @@ This section focuses on endpoints that interact with the detection modules throu
 === "GET"
     !!! info "Usage"
         Used by system admins to view all the modules currently registered in their care home. Will return a list including the module ID, the room its in and its status (any issues with it).
+        !!! warning "Admin Only"
+            Any request made to this endpoint not coming from an Admin's account will be rejected
+
         | Field  | Location |  Type  |       Description        |
         |:------:|:--------:|:------:|:------------------------:|
         | `auth` |  Cookies | String | Session ID for the admin |
-        !!! warning "Admin Only"
-            Any request made to this endpoint not coming from an Admin's account will be rejected
     ???+ success "Successful Request - Status Code 200"
         ``` json
         {
@@ -356,10 +458,16 @@ This section focuses on endpoints that interact with the detection modules throu
             ]
         }
         ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
     ??? failure "Failed Request - Status Code 403"
         ``` json
         {
-            "error": "Unauthorised User"
+            "error": "Unauthorized user"
         }
         ```
 === "POST"
@@ -380,10 +488,16 @@ This section focuses on endpoints that interact with the detection modules throu
             "module": {...}
         }
         ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
     ??? failure "Failed Request - Status Code 403"
         ``` json
         {
-            "error": "Unauthorised User"
+            "error": "Unauthorized user"
         }
         ```
 ### {{ site }}module/<module-id\>
@@ -403,10 +517,22 @@ This section focuses on endpoints that interact with the detection modules throu
             "Status": "None"
         }
         ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
     ??? failure "Failed Request - Status Code 403"
         ``` json
         {
-            "error": "Unauthorized User"
+            "error": "Unauthorized user"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 404"
+        ``` json
+        {
+            "error": "Module not found"
         }
         ```
 === "PUT"
@@ -426,11 +552,30 @@ This section focuses on endpoints that interact with the detection modules throu
             "valid": True
         }
         ```
+    ??? failure "Failed Request - Status Code 400"
+        ``` json
+        {
+            "error": "Location data must be sent"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
     ??? failure "Failed Request - Status Code 403"
         ``` json
         {
-            "error": "Unauthorized User"
+            "error": "Unauthorized user"
         }
+        ```
+    ??? failure "Failed Request - Status Code 404"
+        ``` json
+        {
+            "error": "Module not found"
+        }
+        ```
 === "DELETE"
     !!! info "Usage"
         Allows an admin to remove a module from the system.
@@ -442,9 +587,21 @@ This section focuses on endpoints that interact with the detection modules throu
             Any request made to this endpoint not coming from an Admin's account will be rejected
     ???+ success "Successful Request - Status Code 204"
         No body is returned.
+    ??? failure "Failed Request - Status Code 401"
+        ``` json
+        {
+            "error": "Invalid session ID"
+        }
+        ```
     ??? failure "Failed Request - Status Code 403"
         ``` json
         {
-            "error": "Unauthorized User"
+            "error": "Unauthorized user"
+        }
+        ```
+    ??? failure "Failed Request - Status Code 404"
+        ``` json
+        {
+            "error": "Module not found"
         }
         ```
