@@ -1,8 +1,10 @@
 import json, boto3
 from boto3.dynamodb.conditions import Key
+from hashlib import sha256
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('users')
+carehomes = dynamodb.Table('carehomes')
 
 
 def generateKey(carehome, username):
@@ -37,7 +39,7 @@ def lambda_handler(event, context):
 
         new_username = body["new_username"]
         # new_password = body["new_password"] - hash later
-        new_role = body["new_role"]
+        new_code = body["new_code"]
     except KeyError as err:
         return {
             'statusCode': 400,
@@ -49,12 +51,32 @@ def lambda_handler(event, context):
         }
 
     # Validate inputs here
-    if not validateId(carehome, username):
+    if len(new_username) < 5 and new_username != "":
+        return {
+            'statusCode': 400,
+            'headers': {},
+            'body': json.dumps({
+                'error': f'new username is too short (minimum 5 characters)'
+            }),
+            "isBase64Encoded": False,
+        }
+
+    if not validateUser(carehome, username):
         return {
             'statusCode': 404,
             'headers': {},
             'body': json.dumps({
-                'error': 'module not found'
+                'error': 'user not found'
+            }),
+            "isBase64Encoded": False,
+        }
+
+    if (new_role := validateCode(carehome, new_code)) == False:
+        return {
+            'statusCode': 404,
+            'headers': {},
+            'body': json.dumps({
+                'error': 'user not found'
             }),
             "isBase64Encoded": False,
         }
@@ -74,7 +96,28 @@ def lambda_handler(event, context):
     }
 
 
-def validateId(carehome, username):
+def validateCode(carehome, code):
+    if code == "":
+        return ""
+
+    response = carehomes.query(
+        KeyConditionExpression=Key('id').eq(carehome)
+    )
+
+    if not response["Items"]:
+        return False
+
+    hashed = sha256(code.encode()).hexdigest()
+
+    if hashed == response["Items"][0]["nurse-code"]:
+        return "nurse"
+    elif hashed == response["Items"][0]["admin-code"]:
+        return "admin"
+    else:
+        return False
+
+
+def validateUser(carehome, username):
     response = table.query(
         KeyConditionExpression=Key('carehome').eq(carehome) & Key('username').eq(username)
     )

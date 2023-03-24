@@ -54,6 +54,26 @@ def lambda_handler(event, context):
             "isBase64Encoded": False,
         }
 
+    if len(username) < 5:
+        return {
+            'statusCode': 400,
+            'headers': {},
+            'body': json.dumps({
+                'error': f'new username is too short (minimum 5 characters)'
+            }),
+            "isBase64Encoded": False,
+        }
+
+    if len(password) < 8:
+        return {
+            'statusCode': 400,
+            'headers': {},
+            'body': json.dumps({
+                'error': f'password is too short (minimum 8 characters)'
+            }),
+            "isBase64Encoded": False,
+        }
+
     if not validateUsername(carehome, username):
         return {
             'statusCode': 400,
