@@ -41,7 +41,27 @@ def lambda_handler(event, context):
         }
 
     # Validate inputs here
-    status = True if body["status"] == "true" else False
+    status = True if body["status"].lower() == "true" else False
+
+    if name == "":
+        return {
+            'statusCode': 400,
+            'headers': {},
+            'body': json.dumps({
+                'error': f'name not set'
+            }),
+            "isBase64Encoded": False,
+        }
+
+    if wearable == "":
+        return {
+            'statusCode': 400,
+            'headers': {},
+            'body': json.dumps({
+                'error': f'wearable not set'
+            }),
+            "isBase64Encoded": False,
+        }
 
     residentId = generateId(carehome)
 
