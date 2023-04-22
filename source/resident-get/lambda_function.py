@@ -11,7 +11,7 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'headers': {},
         'body': json.dumps({
-            'modules': fetch(path["carehomeId"], path["residentId"])
+            'modules': fetch(path["carehome-id"], path["resident-id"])
         }),
         "isBase64Encoded": False,
     }

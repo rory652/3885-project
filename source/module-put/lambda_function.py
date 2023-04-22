@@ -23,12 +23,12 @@ def generateAttributes(**attributes):
 
 
 def lambda_handler(event, context):
-    carehome = event["pathParameters"]["carehomeId"]
+    carehome = event["pathParameters"]["carehome-id"]
 
     if not isinstance(carehome, str):
         carehome = str(carehome)
 
-    module = event["pathParameters"]["moduleId"]
+    module = event["pathParameters"]["module-id"]
 
     try:
         body = event["body"]

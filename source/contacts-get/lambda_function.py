@@ -10,7 +10,7 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'headers': {},
         'body': json.dumps({
-            'contacts': fetch(event["pathParameters"]["carehomeId"])
+            'contacts': fetch(event["pathParameters"]["carehome-id"])
         }),
         "isBase64Encoded": False,
     }

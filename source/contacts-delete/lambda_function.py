@@ -11,7 +11,7 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'headers': {},
         'body': json.dumps({
-            'database-status': delete(path["carehomeId"], path["contactId"])["ResponseMetadata"]["HTTPStatusCode"]
+            'database-status': delete(path["carehome-id"], path["contact-id"])["ResponseMetadata"]["HTTPStatusCode"]
         }),
         "isBase64Encoded": False,
     }

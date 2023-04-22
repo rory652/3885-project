@@ -17,7 +17,7 @@ def generateItem(carehome, id, room, status):
 
 
 def lambda_handler(event, context):
-    carehome = event["pathParameters"]["carehomeId"]
+    carehome = event["pathParameters"]["carehome-id"]
 
     if not isinstance(carehome, str):
         carehome = str(carehome)
