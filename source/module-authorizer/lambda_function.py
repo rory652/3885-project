@@ -9,7 +9,7 @@ table = dynamodb.Table('modules')
 def lambda_handler(event, context):
     resource = event["methodArn"]
     try:
-        carehome = resource.split("/")[4]
+        carehome = resource.split("/")[3]
     except IndexError:
         carehome = "testing"
 

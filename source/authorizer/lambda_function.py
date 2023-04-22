@@ -32,13 +32,13 @@ def lambda_handler(event, context):
     return generatePolicy(sessionId, "Allow", resource)
 
 
-# arn:aws:execute-api:us-east-1:269037940490:2r426oxcbj/*/{request}/{endpoint}/{carehome}/{specific}
+# arn:aws:execute-api:us-east-1:269037940490:2r426oxcbj/*/{request}/{carehome}/{endpoint}/{specific}
 def parseResource(resource):
     temp = resource.split("/")[2:]
 
     request = temp[0]
-    endpoint = temp[1]
-    carehome = temp[2]
+    endpoint = temp[2]
+    carehome = temp[1]
     extra = "-extra" if len(temp) == 4 and temp[3] != "" else ""
 
     endpoint = endpoint + extra
