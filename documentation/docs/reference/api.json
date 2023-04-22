@@ -1,211 +1,230 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.0.2",
   "info": {
-    "title": "jerb-tracker-api",
-    "description": "The API for the JERB Tracker Back-end",
-    "version": "1.0.0"
+    "version": "1.0.1",
+    "title": "Jerb Tracker",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "x-logo": {
+      "url": "https://redocly.github.io/openapi-template/logo.png"
+    },
+    "description": "This API runs the backend for the Jerb Tracker application. The endpoints provide access to the data stored within this system. Module endpoints are used by Bluetooth modules to input data.\n"
   },
+  "externalDocs": {
+    "description": "GitHub Repo",
+    "url": "https://github.com/rory652/3885-project"
+  },
+  "tags": [
+    {
+      "name": "Carehome",
+      "description": "Operations about carehomes"
+    },
+    {
+      "name": "Contacts",
+      "description": "Operations about contacts"
+    },
+    {
+      "name": "Locations",
+      "description": "Operations about locations"
+    },
+    {
+      "name": "Modules",
+      "description": "Operations about modules"
+    },
+    {
+      "name": "Residents",
+      "description": "Operations about residents"
+    },
+    {
+      "name": "Users",
+      "description": "Operations about users"
+    },
+    {
+      "name": "Login",
+      "description": "Operations about logging in/out"
+    }
+  ],
   "servers": [
     {
-      "url": "https://virtserver.swaggerhub.com/RORYCOE652/jerb-tracker/1.0.0",
-      "description": "SwaggerHub API Auto Mocking"
+      "url": "https://api.jerbtracker.co.uk"
     }
   ],
   "paths": {
-    "/contacts/{carehomeId}": {
+    "/carehome/": {
+      "post": {
+        "tags": [
+          "Carehome"
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/{carehome-id}/contacts/": {
+      "parameters": [
+        {
+          "name": "carehome-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the carehome the user belongs to",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "tags": [
           "Contacts"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "role_auth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Fetches contacts - Nurse",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Contacts"
-                  }
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
           }
         }
       }
     },
-    "/contacts/{carehomeId}/{contactId}": {
+    "/{carehome-id}/contacts/{contact-id}/": {
+      "parameters": [
+        {
+          "name": "carehome-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the carehome the user belongs to",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "contact-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the contact being accessed",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "delete": {
         "tags": [
           "Contacts"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "contactId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "role_auth": []
           }
         ],
         "responses": {
           "204": {
-            "description": "Deletes contact - Nurse",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/204Response"
-                  }
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       }
     },
-    "/locations/{carehomeId}": {
+    "/{carehome-id}/locations/": {
+      "parameters": [
+        {
+          "name": "carehome-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the carehome the user belongs to",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "tags": [
           "Locations"
         ],
         "parameters": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "moduleId",
+            "in": "body",
+            "description": "ID of the module the location is sent from",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "MODULE-SECRET",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "wearableId",
+            "in": "body",
+            "description": "ID of the wearable giving the location",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "body",
+            "description": "Location coordinates",
+            "schema": {
+              "$ref": "#/components/schemas/Location"
             }
           }
         ],
-        "requestBody": {
-          "description": "JSON object containing the Location data for each resident",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LocationPostRequest"
-              }
-            }
-          },
-          "required": true
-        },
+        "security": [
+          {
+            "module_auth": []
+          }
+        ],
         "responses": {
           "201": {
-            "description": "Adds location - Module",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/201Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       }
     },
-    "/modules/{carehomeId}": {
+    "/{carehome-id}/modules/": {
+      "parameters": [
+        {
+          "name": "carehome-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the carehome the user belongs to",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "tags": [
           "Modules"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "role_auth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Fetches modules - Admin",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Modules"
-                  }
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
           }
         }
       },
@@ -215,100 +234,76 @@
         ],
         "parameters": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "room",
+            "in": "body",
+            "description": "Room the module is in",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "status",
+            "in": "body",
+            "description": "Module's status",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             }
           }
         ],
-        "requestBody": {
-          "description": "JSON object containing the Room and initial Status",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ModulePostRequest"
-              }
-            }
-          },
-          "required": true
-        },
+        "security": [
+          {
+            "role_auth": []
+          }
+        ],
         "responses": {
           "201": {
-            "description": "Adds module - Admin",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/201Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
           }
         }
       }
     },
-    "/modules/{carehomeId}/{moduleId}": {
+    "/{carehome-id}/modules/{module-id}": {
+      "parameters": [
+        {
+          "name": "carehome-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the carehome the user belongs to",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "module-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the module being accessed",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "tags": [
           "Modules"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "moduleId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "role_auth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Fetches module - Admin",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Modules"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       },
@@ -318,58 +313,36 @@
         ],
         "parameters": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "new_room",
+            "in": "body",
+            "description": "New room the module is in (optional)",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "moduleId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "new_status",
+            "in": "body",
+            "description": "Module's new status (optional)",
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
             }
           }
         ],
-        "requestBody": {
-          "description": "JSON object containing the new Status and/or Room",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ModulePutRequest"
-              }
-            }
-          },
-          "required": true
-        },
+        "security": [
+          {
+            "module_auth": []
+          }
+        ],
         "responses": {
           "201": {
-            "description": "Updates module - Admin/Module",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/201Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized module"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       },
@@ -377,94 +350,51 @@
         "tags": [
           "Modules"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "moduleId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "role_auth": []
           }
         ],
         "responses": {
           "204": {
-            "description": "Deletes module - Admin",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/204Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       }
     },
-    "/residents/{carehomeId}": {
+    "/{carehome-id}/residents/": {
+      "parameters": [
+        {
+          "name": "carehome-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the carehome the user belongs to",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "tags": [
           "Residents"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "role_auth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Fetches residents - Nurse",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Residents"
-                  }
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
           }
         }
       },
@@ -474,100 +404,84 @@
         ],
         "parameters": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "name",
+            "in": "body",
+            "description": "Resident's Name",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "status",
+            "in": "body",
+            "description": "Resident's covid status",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
+            }
+          },
+          {
+            "name": "wearableId",
+            "in": "body",
+            "description": "Resident's wearable ID",
+            "schema": {
+              "type": "string"
             }
           }
         ],
-        "requestBody": {
-          "description": "JSON object containing the Name, Wearable and Status",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ResidentPostRequest"
-              }
-            }
-          },
-          "required": true
-        },
+        "security": [
+          {
+            "role_auth": []
+          }
+        ],
         "responses": {
           "201": {
-            "description": "Adds resident - Nurse",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/201Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
           }
         }
       }
     },
-    "/residents/{carehomeId}/{residentId}": {
+    "/{carehome-id}/residents/{resident-id}": {
+      "parameters": [
+        {
+          "name": "carehome-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the carehome the user belongs to",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "resident-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the resident being accessed",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "tags": [
           "Residents"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "residentId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "role_auth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Fetches resident - Nurse",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Residents"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       },
@@ -577,58 +491,44 @@
         ],
         "parameters": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "new_name",
+            "in": "body",
+            "description": "Resident's  new name (optional)",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "residentId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "new_status",
+            "in": "body",
+            "description": "Resident's new covid status (optional)",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "new_wearable",
+            "in": "body",
+            "description": "Resident's new wearable ID (optional)",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             }
           }
         ],
-        "requestBody": {
-          "description": "JSON object containing the new Name and/or Wearable",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ResidentPutRequest"
-              }
-            }
-          },
-          "required": true
-        },
+        "security": [
+          {
+            "role_auth": []
+          }
+        ],
         "responses": {
           "201": {
-            "description": "Updates resident - Nurse",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/201Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       },
@@ -636,83 +536,51 @@
         "tags": [
           "Residents"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "residentId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "role_auth": []
           }
         ],
         "responses": {
           "204": {
-            "description": "Deletes resident - Nurse",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/204Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       }
     },
-    "/users/{carehomeId}": {
+    "/{carehome-id}/users/": {
+      "parameters": [
+        {
+          "name": "carehome-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the carehome the user belongs to",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "tags": [
           "Users"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
+            "role_auth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Fetches users - Admin",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Users"
-                  }
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
           }
         }
       },
@@ -722,101 +590,79 @@
         ],
         "parameters": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "username",
+            "in": "body",
+            "description": "User's username",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "password",
+            "in": "body",
+            "description": "User's password",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "body",
+            "description": "User's role code - gives them admin or nurse permissions",
+            "schema": {
+              "type": "string"
             }
           }
         ],
-        "requestBody": {
-          "description": "JSON object containing the Username, Password, Name and Role",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserPostRequest"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "201": {
-            "description": "Adds user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/201Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request"
           }
-        },
-        "security": []
+        }
       }
     },
-    "/users/{carehomeId}/{username}": {
+    "/{carehome-id}/users/{username}": {
+      "parameters": [
+        {
+          "name": "carehome-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the carehome the user belongs to",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "username",
+          "in": "path",
+          "required": true,
+          "description": "Username being accessed",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "get": {
         "tags": [
           "Users"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "user_auth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Fetches user - User",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Users"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       },
@@ -824,60 +670,47 @@
         "tags": [
           "Users"
         ],
+        "description": "One of the parameters must be set",
         "parameters": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "new_username",
+            "in": "body",
+            "description": "User's new password (optional)",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "username",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "new_password",
+            "in": "body",
+            "description": "User's new password (optional)",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "new_code",
+            "in": "body",
+            "description": "User's new role code (optional)",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             }
           }
         ],
-        "requestBody": {
-          "description": "JSON object containing the new Username and/or Password",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserPutRequest"
-              }
-            }
-          },
-          "required": true
-        },
+        "security": [
+          {
+            "user_auth": []
+          }
+        ],
         "responses": {
           "201": {
-            "description": "Updates user - User",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/201Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       },
@@ -885,121 +718,85 @@
         "tags": [
           "Users"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "username",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "SESSION-ID",
-            "in": "header",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
+            "user_auth": []
           }
         ],
         "responses": {
           "204": {
-            "description": "Deletes user - User",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/204Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       }
     },
-    "/login/{carehomeId}": {
+    "/{carehome-id}/login/": {
+      "parameters": [
+        {
+          "name": "carehome-id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the carehome the user belongs to",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
       "post": {
         "tags": [
           "Login"
         ],
         "parameters": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
+            "name": "username",
+            "in": "body",
+            "description": "User's username",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "User's password",
             "schema": {
               "type": "string"
             }
           }
         ],
-        "requestBody": {
-          "description": "JSON object containing the Username and Password",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "201": {
-            "description": "Creates session",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/201Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
           }
-        },
-        "security": []
+        }
       },
       "delete": {
         "tags": [
           "Login"
         ],
-        "parameters": [
+        "security": [
           {
-            "name": "carehomeId",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
+            "user_auth": []
           }
         ],
         "responses": {
           "204": {
-            "description": "Deletes session (log out) - User",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/204Response"
-                }
-              }
-            }
+            "description": "Success"
+          },
+          "403": {
+            "description": "Unauthorized user"
+          },
+          "404": {
+            "description": "Resource not found"
           }
         }
       }
@@ -1007,338 +804,45 @@
   },
   "components": {
     "schemas": {
-      "Contacts": {
-        "required": [
-          "healthy-resident",
-          "id",
-          "infected-resident",
-          "timestamp"
-        ],
+      "Location": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the contact",
-            "example": "12345678"
+          "x": {
+            "description": "X Coordinate",
+            "type": "number",
+            "example": 1.2345678
           },
-          "infectedResident": {
-            "type": "string",
-            "description": "The unique identifier for the infected resident",
-            "example": "b87ca54f"
+          "y": {
+            "description": "Y Coordinate",
+            "type": "number",
+            "example": 1.2345678
           },
-          "healthyResident": {
-            "type": "string",
-            "description": "The unique identifier for the infected resident",
-            "example": "4058f2ec"
-          },
-          "timestamp": {
-            "type": "string",
-            "description": "The timestamp when the contact was deteced",
-            "format": "date-time"
+          "z": {
+            "description": "Z Coordinate",
+            "type": "number",
+            "example": 1.2345678
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "role_auth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "SESSION-ID",
+        "description": "Authorizes the user for the endpoint if they have the correct role (\"admin\" or \"nurse\")"
       },
-      "LocationPostRequest": {
-        "required": [
-          "location",
-          "moduleId",
-          "resident"
-        ],
-        "type": "object",
-        "properties": {
-          "moduleId": {
-            "type": "string",
-            "description": "The unique identifier for the module",
-            "example": "12345678"
-          },
-          "wearable": {
-            "type": "string",
-            "description": "The unique identifier for the wearable",
-            "example": "b87ca54f"
-          },
-          "location": {
-            "type": "string",
-            "description": "String containing location data",
-            "example": "156,123,093"
-          }
-        }
+      "user_auth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "SESSION-ID",
+        "description": "Authorizes the user for the endpoint if their session ID matches the username they're trying to access"
       },
-      "Modules": {
-        "required": [
-          "carehome",
-          "id",
-          "room",
-          "status"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the module",
-            "example": "12345678"
-          },
-          "room": {
-            "type": "string",
-            "description": "Room the module is in",
-            "example": "Living Room"
-          },
-          "status": {
-            "type": "string",
-            "description": "Module's status",
-            "example": "Fully Operational"
-          },
-          "carehome": {
-            "type": "string",
-            "description": "The unique identifier for the carehome",
-            "example": "12345678"
-          }
-        }
-      },
-      "ModulePostRequest": {
-        "required": [
-          "id",
-          "room",
-          "status"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the module",
-            "example": "12345678"
-          },
-          "room": {
-            "type": "string",
-            "description": "Room the module is in",
-            "example": "Living Room"
-          },
-          "status": {
-            "type": "string",
-            "description": "Module's status",
-            "example": "Fully Operational"
-          }
-        }
-      },
-      "ModulePutRequest": {
-        "type": "object",
-        "properties": {
-          "new_room": {
-            "type": "string",
-            "description": "The new room the module is in",
-            "example": "Living Room"
-          },
-          "new_status": {
-            "type": "string",
-            "description": "Module's new status",
-            "example": "Fully Operational"
-          }
-        }
-      },
-      "Residents": {
-        "required": [
-          "carehome",
-          "id",
-          "name",
-          "status",
-          "wearable"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the resident",
-            "example": "12345678"
-          },
-          "name": {
-            "type": "string",
-            "description": "Resident's name",
-            "example": "John Smith"
-          },
-          "status": {
-            "type": "boolean",
-            "description": "Whether the patient has covid",
-            "example": false
-          },
-          "wearable": {
-            "type": "string",
-            "description": "The unique identifier for the wearable",
-            "example": "87654321"
-          },
-          "carehome": {
-            "type": "string",
-            "description": "The unique identifier for the carehome",
-            "example": "12345678"
-          }
-        }
-      },
-      "ResidentPostRequest": {
-        "required": [
-          "name",
-          "status",
-          "wearable"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Resident's name",
-            "example": "John Smith"
-          },
-          "status": {
-            "type": "boolean",
-            "description": "Whether the patient has covid",
-            "example": false
-          },
-          "wearable": {
-            "type": "string",
-            "description": "The unique identifier for the wearable",
-            "example": "87654321"
-          }
-        }
-      },
-      "ResidentPutRequest": {
-        "type": "object",
-        "properties": {
-          "new_name": {
-            "type": "string",
-            "description": "Resident's new name",
-            "example": "Jonathon Smith"
-          },
-          "new_status": {
-            "type": "boolean",
-            "description": "Resident's new covid status",
-            "example": false
-          },
-          "new_wearable": {
-            "type": "string",
-            "description": "The unique identifier for the new wearable",
-            "example": "65200256"
-          }
-        }
-      },
-      "Users": {
-        "required": [
-          "carehome",
-          "name",
-          "role",
-          "username"
-        ],
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string",
-            "description": "The unique username for the user",
-            "example": "emmaOwen1983"
-          },
-          "name": {
-            "type": "string",
-            "description": "User's name",
-            "example": "Emma Owen"
-          },
-          "role": {
-            "type": "string",
-            "description": "User's role",
-            "example": "Nurse"
-          },
-          "carehome": {
-            "type": "string",
-            "description": "The unique identifier for the carehome",
-            "example": "12345678"
-          }
-        }
-      },
-      "UserPostRequest": {
-        "required": [
-          "carehome-code",
-          "name",
-          "password",
-          "username"
-        ],
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string",
-            "description": "The unique username for the user",
-            "example": "emmaOwen1983"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password",
-            "example": "superSecurePassword"
-          },
-          "name": {
-            "type": "string",
-            "description": "User's name",
-            "example": "Emma Owen"
-          },
-          "carehome-code": {
-            "type": "string",
-            "description": "Invitation code for the carehome",
-            "example": "12345678"
-          }
-        }
-      },
-      "UserPutRequest": {
-        "type": "object",
-        "properties": {
-          "new_username": {
-            "type": "string",
-            "description": "The new unique username for the user",
-            "example": "emma-owen"
-          },
-          "new_password": {
-            "type": "string",
-            "description": "User's new password",
-            "example": "newSuperSecurePassword"
-          }
-        }
-      },
-      "LoginRequest": {
-        "required": [
-          "password",
-          "username"
-        ],
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string",
-            "description": "User's username",
-            "example": "rory652"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password",
-            "example": "securePassword"
-          }
-        }
-      },
-      "201Response": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int32",
-            "example": 201
-          },
-          "message": {
-            "type": "string",
-            "example": "entry added"
-          }
-        }
-      },
-      "204Response": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int32",
-            "example": 204
-          },
-          "message": {
-            "type": "string",
-            "example": "entry deleted"
-          }
-        }
+      "module_auth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "MODULE-ID",
+        "description": "Authorizes a bluetooth module to upload location data"
       }
     }
   }
