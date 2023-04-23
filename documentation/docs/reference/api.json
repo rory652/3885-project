@@ -1,849 +1,683 @@
-{
-  "openapi": "3.0.2",
-  "info": {
-    "version": "1.0.1",
-    "title": "Jerb Tracker",
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "x-logo": {
-      "url": "https://redocly.github.io/openapi-template/logo.png"
-    },
-    "description": "This API runs the backend for the Jerb Tracker application. The endpoints provide access to the data stored within this system. Module endpoints are used by Bluetooth modules to input data.\n"
-  },
-  "externalDocs": {
-    "description": "GitHub Repo",
-    "url": "https://github.com/rory652/3885-project"
-  },
-  "tags": [
-    {
-      "name": "Carehome",
-      "description": "Operations about carehomes"
-    },
-    {
-      "name": "Contacts",
-      "description": "Operations about contacts"
-    },
-    {
-      "name": "Locations",
-      "description": "Operations about locations"
-    },
-    {
-      "name": "Modules",
-      "description": "Operations about modules"
-    },
-    {
-      "name": "Residents",
-      "description": "Operations about residents"
-    },
-    {
-      "name": "Users",
-      "description": "Operations about users"
-    },
-    {
-      "name": "Login",
-      "description": "Operations about logging in/out"
-    }
-  ],
-  "servers": [
-    {
-      "url": "https://api.jerbtracker.co.uk"
-    }
-  ],
-  "paths": {
-    "/carehome/": {
-      "post": {
-        "tags": [
-          "Carehome"
-        ],
-        "responses": {
-          "201": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/{carehome-id}/contacts/": {
-      "parameters": [
-        {
-          "name": "carehome-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the carehome the user belongs to",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "get": {
-        "tags": [
-          "Contacts"
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          }
-        }
-      }
-    },
-    "/{carehome-id}/contacts/{contact-id}/": {
-      "parameters": [
-        {
-          "name": "carehome-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the carehome the user belongs to",
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "contact-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the contact being accessed",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "delete": {
-        "tags": [
-          "Contacts"
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      }
-    },
-    "/{carehome-id}/locations/": {
-      "parameters": [
-        {
-          "name": "carehome-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the carehome the user belongs to",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "post": {
-        "tags": [
-          "Locations"
-        ],
-        "parameters": [
-          {
-            "name": "moduleId",
-            "in": "body",
-            "description": "ID of the module the location is sent from",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "wearableId",
-            "in": "body",
-            "description": "ID of the wearable giving the location",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "location",
-            "in": "body",
-            "description": "Location coordinates",
-            "schema": {
-              "$ref": "#/components/schemas/Location"
-            }
-          }
-        ],
-        "security": [
-          {
-            "module_auth": []
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      }
-    },
-    "/{carehome-id}/modules/": {
-      "parameters": [
-        {
-          "name": "carehome-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the carehome the user belongs to",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "get": {
-        "tags": [
-          "Modules"
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Modules"
-        ],
-        "parameters": [
-          {
-            "name": "room",
-            "in": "body",
-            "description": "Room the module is in",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "status",
-            "in": "body",
-            "description": "Module's status",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          }
-        }
-      }
-    },
-    "/{carehome-id}/modules/{module-id}": {
-      "parameters": [
-        {
-          "name": "carehome-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the carehome the user belongs to",
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "module-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the module being accessed",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "get": {
-        "tags": [
-          "Modules"
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Modules"
-        ],
-        "parameters": [
-          {
-            "name": "new_room",
-            "in": "body",
-            "description": "New room the module is in (optional)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "new_status",
-            "in": "body",
-            "description": "Module's new status (optional)",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "module_auth": []
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized module"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Modules"
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      }
-    },
-    "/{carehome-id}/residents/": {
-      "parameters": [
-        {
-          "name": "carehome-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the carehome the user belongs to",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "get": {
-        "tags": [
-          "Residents"
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Residents"
-        ],
-        "parameters": [
-          {
-            "name": "name",
-            "in": "body",
-            "description": "Resident's Name",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "status",
-            "in": "body",
-            "description": "Resident's covid status",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "wearableId",
-            "in": "body",
-            "description": "Resident's wearable ID",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          }
-        }
-      }
-    },
-    "/{carehome-id}/residents/{resident-id}": {
-      "parameters": [
-        {
-          "name": "carehome-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the carehome the user belongs to",
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "resident-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the resident being accessed",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "get": {
-        "tags": [
-          "Residents"
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Residents"
-        ],
-        "parameters": [
-          {
-            "name": "new_name",
-            "in": "body",
-            "description": "Resident's  new name (optional)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "new_status",
-            "in": "body",
-            "description": "Resident's new covid status (optional)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "new_wearable",
-            "in": "body",
-            "description": "Resident's new wearable ID (optional)",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Residents"
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      }
-    },
-    "/{carehome-id}/users/": {
-      "parameters": [
-        {
-          "name": "carehome-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the carehome the user belongs to",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "security": [
-          {
-            "role_auth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "body",
-            "description": "User's username",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "body",
-            "description": "User's password",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "code",
-            "in": "body",
-            "description": "User's role code - gives them admin or nurse permissions",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Success"
-          },
-          "400": {
-            "description": "Bad request"
-          }
-        }
-      }
-    },
-    "/{carehome-id}/users/{username}": {
-      "parameters": [
-        {
-          "name": "carehome-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the carehome the user belongs to",
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "username",
-          "in": "path",
-          "required": true,
-          "description": "Username being accessed",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "security": [
-          {
-            "user_auth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Users"
-        ],
-        "description": "One of the parameters must be set",
-        "parameters": [
-          {
-            "name": "new_username",
-            "in": "body",
-            "description": "User's new password (optional)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "new_password",
-            "in": "body",
-            "description": "User's new password (optional)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "new_code",
-            "in": "body",
-            "description": "User's new role code (optional)",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "user_auth": []
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Users"
-        ],
-        "security": [
-          {
-            "user_auth": []
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      }
-    },
-    "/{carehome-id}/login/": {
-      "parameters": [
-        {
-          "name": "carehome-id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the carehome the user belongs to",
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "post": {
-        "tags": [
-          "Login"
-        ],
-        "parameters": [
-          {
-            "name": "username",
-            "in": "body",
-            "description": "User's username",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "body",
-            "description": "User's password",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Login"
-        ],
-        "security": [
-          {
-            "user_auth": []
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Success"
-          },
-          "403": {
-            "description": "Unauthorized user"
-          },
-          "404": {
-            "description": "Resource not found"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Location": {
-        "type": "object",
-        "properties": {
-          "x": {
-            "description": "X Coordinate",
-            "type": "number",
-            "example": 1.2345678
-          },
-          "y": {
-            "description": "Y Coordinate",
-            "type": "number",
-            "example": 1.2345678
-          },
-          "z": {
-            "description": "Z Coordinate",
-            "type": "number",
-            "example": 1.2345678
-          }
-        }
-      }
-    },
-    "securitySchemes": {
-      "role_auth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "SESSION-ID",
-        "description": "Authorizes the user for the endpoint if they have the correct role (\"admin\" or \"nurse\")"
-      },
-      "user_auth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "SESSION-ID",
-        "description": "Authorizes the user for the endpoint if their session ID matches the username they're trying to access"
-      },
-      "module_auth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "MODULE-ID",
-        "description": "Authorizes a bluetooth module to upload location data"
-      }
-    }
-  }
-}
+
+openapi: 3.0.2
+info:
+  version: '1.0.1'
+  title: Jerb Tracker
+
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  x-logo:
+    url: 'https://redocly.github.io/openapi-template/logo.png'
+  
+  # Describe your API here, you can use GFM (https://guides.github.com/features/mastering-markdown) here
+  description: |
+    This API runs the backend for the Jerb Tracker application. The endpoints provide access to the data stored within this system. Module endpoints are used by Bluetooth modules to input data.
+
+externalDocs:
+  description: GitHub Repo
+  url: 'https://github.com/rory652/3885-project'
+
+# A list of tags used by the definition with additional metadata.
+# The order of the tags can be used to reflect on their order by the parsing tools.
+tags:
+  - name: Carehome
+    description: Operations about carehomes
+  - name: Contacts
+    description: Operations about contacts
+  - name: Locations
+    description: Operations about locations
+  - name: Modules
+    description: Operations about modules
+  - name: Residents
+    description: Operations about residents
+  - name: Users
+    description: Operations about users
+  - name: Login
+    description: Operations about logging in/out
+servers:
+  - url: 'https://api.jerbtracker.co.uk'
+
+# Holds the relative paths to the individual endpoints. The path is appended to the
+# basePath in order to construct the full URL. 
+paths:
+  '/carehome/':
+    post:
+      tags:
+        - Carehome
+      responses:
+        '201':
+          description: Success
+          headers:
+            carehome:
+              description: Carehome's ID
+              schema:
+                type: string
+            nurse-code:
+              description: Code used to make nurse accounts
+              schema:
+                type: string
+            admin-code:
+              description: Code used to make admin accounts
+              schema:
+                type: string
+
+  '/{carehome-id}/contacts/':
+    parameters:
+      - name: carehome-id
+        in: path
+        required: true
+        description: ID of the carehome the user belongs to
+        schema:
+          type: string
+    get:
+      tags:
+        - Contacts
+      security:
+        - role_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        '403':
+          description: Unauthorized user
+  '/{carehome-id}/contacts/{contact-id}/':
+    parameters:
+      - name: carehome-id
+        in: path
+        required: true
+        description: ID of the carehome the user belongs to
+        schema:
+          type: string
+      - name: contact-id
+        in: path
+        required: true
+        description: ID of the contact being accessed
+        schema:
+          type: string
+    delete:
+      tags:
+        - Contacts
+      security:
+        - role_auth: []
+      responses:
+        '204':
+          description: Success
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+
+  '/{carehome-id}/locations/':
+    parameters:
+      - name: carehome-id
+        in: path
+        required: true
+        description: ID of the carehome the user belongs to
+        schema:
+          type: string
+    post:
+      tags:
+        - Locations
+      parameters:
+        - name: moduleId
+          in: body
+          description: ID of the module the location is sent from
+          schema:
+            type: string
+        - name: wearableId
+          in: body
+          description: ID of the wearable giving the location
+          schema:
+            type: string
+        - name: location
+          in: body
+          description: Location coordinates
+          schema:
+            $ref: '#/components/schemas/Location'
+      security:
+        - module_auth: []
+      responses:
+        '201':
+          description: Success
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+
+
+  '/{carehome-id}/modules/':
+    parameters:
+      - name: carehome-id
+        in: path
+        required: true
+        description: ID of the carehome the user belongs to
+        schema:
+          type: string
+    get:
+      tags:
+        - Modules
+      security:
+        - role_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Module'
+        '403':
+          description: Unauthorized user
+    post:
+      tags:
+        - Modules
+      parameters:
+        - name: room
+          in: body
+          description: Room the module is in
+          schema:
+            type: string
+        - name: status
+          in: body
+          description: Module's status
+          schema:
+            type: string
+      security:
+        - role_auth: []
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    description: Module's ID
+                    type: string
+                    example: 07745453d0c18842
+        '403':
+            description: Unauthorized user
+  '/{carehome-id}/modules/{module-id}':
+    parameters:
+      - name: carehome-id
+        in: path
+        required: true
+        description: ID of the carehome the user belongs to
+        schema:
+          type: string
+      - name: module-id
+        in: path
+        required: true
+        description: ID of the module being accessed
+        schema:
+          type: string
+    get:
+      tags:
+        - Modules
+      security:
+        - role_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+    put:
+      tags:
+        - Modules
+      parameters:
+        - name: new_room
+          in: body
+          description: New room the module is in (optional)
+          schema:
+            type: string
+        - name: new_status
+          in: body
+          description: Module's new status (optional)
+          schema:
+            type: string
+      security:
+        - module_auth: []
+      responses:
+        '201':
+          description: Success
+        '403':
+          description: Unauthorized module
+        '404':
+          description: Resource not found
+      
+    delete:
+      tags:
+        - Modules
+      security:
+        - role_auth: []
+      responses:
+        '204':
+          description: Success
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+
+  '/{carehome-id}/residents/':
+    parameters:
+      - name: carehome-id
+        in: path
+        required: true
+        description: ID of the carehome the user belongs to
+        schema:
+          type: string
+    get:
+      tags:
+        - Residents
+      security:
+        - role_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Resident'
+        '403':
+          description: Unauthorized user
+    post:
+      tags:
+        - Residents
+      parameters:
+        - name: name
+          in: body
+          description: Resident's Name
+          schema:
+            type: string
+        - name: status
+          in: body
+          description: Resident's covid status
+          schema:
+            type: string
+        - name: wearableId
+          in: body
+          description: Resident's wearable ID
+          schema:
+            type: string
+      security:
+        - role_auth: []
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    description: Resident's ID
+                    type: string
+                    example: 07745453d0c18842
+        '403':
+          description: Unauthorized user
+  '/{carehome-id}/residents/{resident-id}':
+    parameters:
+      - name: carehome-id
+        in: path
+        required: true
+        description: ID of the carehome the user belongs to
+        schema:
+          type: string
+      - name: resident-id
+        in: path
+        required: true
+        description: ID of the resident being accessed
+        schema:
+          type: string
+    get:
+      tags:
+        - Residents
+      security:
+        - role_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resident'
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+    put:
+      tags:
+        - Residents
+      parameters:
+        - name: new_name
+          in: body
+          description: Resident's  new name (optional)
+          schema:
+            type: string
+        - name: new_status
+          in: body
+          description: Resident's new covid status (optional)
+          schema:
+            type: string
+        - name: new_wearable
+          in: body
+          description: Resident's new wearable ID (optional)
+          schema:
+            type: string
+      security:
+        - role_auth: []
+      responses:
+        '201':
+          description: Success
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+    delete:
+      tags:
+        - Residents
+      security:
+        - role_auth: []
+      responses:
+        '204':
+          description: Success
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+
+  '/{carehome-id}/users/':
+    parameters:
+      - name: carehome-id
+        in: path
+        required: true
+        description: ID of the carehome the user belongs to
+        schema:
+          type: string
+    get:
+      tags:
+        - Users
+      security:
+        - role_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '403':
+          description: Unauthorized user
+    post:
+      tags:
+        - Users
+      parameters:
+        - name: username
+          in: body
+          description: User's username
+          schema:
+            type: string
+        - name: password
+          in: body
+          description: User's password
+          schema:
+            type: string
+        - name: code
+          in: body
+          description: User's role code - gives them admin or nurse permissions
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Success
+        '400':
+          description: Bad request
+  '/{carehome-id}/users/{username}':
+    parameters:
+      - name: carehome-id
+        in: path
+        required: true
+        description: ID of the carehome the user belongs to
+        schema:
+          type: string
+      - name: username
+        in: path
+        required: true
+        description: Username being accessed
+        schema:
+          type: string
+    get:
+      tags:
+        - Users
+      security:
+        - user_auth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+    put:
+      tags:
+        - Users
+      description: One of the parameters must be set
+      parameters:
+        - name: new_username
+          in: body
+          description: User's new password (optional)
+          schema:
+            type: string
+        - name: new_password
+          in: body
+          description: User's new password (optional)
+          schema:
+            type: string
+        - name: new_code
+          in: body
+          description: User's new role code (optional)
+          schema:
+            type: string
+      security:
+        - user_auth: []
+      responses:
+        '201':
+          description: Success
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+
+    delete:
+      tags:
+        - Users
+      security:
+        - user_auth: []
+      responses:
+        '204':
+          description: Success
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+
+  '/{carehome-id}/login/':
+    parameters:
+      - name: carehome-id
+        in: path
+        required: true
+        description: ID of the carehome the user belongs to
+        schema:
+          type: string
+    post:
+      tags:
+        - Login
+      parameters:
+        - name: username
+          in: body
+          description: User's username
+          schema:
+            type: string
+        - name: password
+          in: body
+          description: User's password
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                properties:
+                  SESSION-ID:
+                    description: User's session ID
+                    type: string
+                    example: 07745453d0c18842
+        '403':
+          description: Unauthorized user
+    delete:
+      tags:
+        - Login
+      security:
+        - user_auth: []
+      responses:
+        '204':
+          description: Success
+        '403':
+          description: Unauthorized user
+        '404':
+          description: Resource not found
+        
+# An object to hold reusable parts that can be used across the definition
+components:
+  schemas:
+    Location:
+      type: object
+      properties:
+        x:
+          description: X Coordinate
+          type: number
+          example: 1.2345678
+        y:
+          description: Y Coordinate
+          type: number
+          example: 1.2345678
+        z:
+          description: Z Coordinate
+          type: number
+          example: 1.2345678
+    Contact:
+      type: object
+      properties:
+        carehome:
+          description: Carehome the contact belongs to
+          type: string
+          example: 1234
+        residents:
+          description: Resident's involved in the contact
+          type: object
+          properties:
+            one:
+              type: string
+              example: 12345678
+            two:
+              type: string
+              example: 87654321
+        timestamp:
+          description: Time the contact occured
+          type: string
+          example: 12:30:42
+    Module:
+      type: object
+      properties:
+        id:
+          description: Module's ID
+          type: string
+          example: 12345678
+        carehome:
+          description: Carehome the module belongs to
+          type: string
+          example: 1234
+        room:
+          description: Room the module is in
+          type: string
+          example: Kitchen
+        status:
+          description: Module's current status
+          type: string
+          example: Battery Low
+    Resident:
+      type: object
+      properties:
+        id:
+          description: Resident's ID
+          type: string
+          example: 12345678
+        carehome:
+          description: Carehome the resident belongs to
+          type: string
+          example: 1234
+        name:
+          description: Resident's name
+          type: string
+          example: John Smith
+        status:
+          description: Resident's covid status
+          type: string
+          example: Needs Testing
+        wearable:
+          description: ID of the resident's wearable
+          type: string
+          example: 87654321
+    User:
+      type: object
+      properties:
+        username:
+          description: User's username
+          type: string
+          example: claire1996
+        carehome:
+          description: Carehome the user belongs to
+          type: string
+          example: 1234
+        role:
+          description: User's role in the carehome
+          type: string
+          example: nurse
+  securitySchemes:
+    role_auth:
+      type: apiKey
+      in: header
+      name: SESSION-ID
+      description: Authorizes the user for the endpoint if they have the correct role ("admin" or "nurse")
+    user_auth:
+      type: apiKey
+      in: header
+      name: SESSION-ID
+      description: Authorizes the user for the endpoint if their session ID matches the username they're trying to access
+    module_auth:
+      type: apiKey
+      in: header
+      name: MODULE-ID
+      description: Authorizes a bluetooth module to upload location data
