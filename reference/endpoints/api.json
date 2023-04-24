@@ -59,7 +59,27 @@
         ],
         "responses": {
           "201": {
-            "description": "Success"
+            "description": "Success",
+            "headers": {
+              "carehome": {
+                "description": "Carehome's ID",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "nurse-code": {
+                "description": "Code used to make nurse accounts",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "admin-code": {
+                "description": "Code used to make admin accounts",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
@@ -87,7 +107,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Contact"
+                  }
+                }
+              }
+            }
           },
           "403": {
             "description": "Unauthorized user"
@@ -221,7 +251,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Module"
+                  }
+                }
+              }
+            }
           },
           "403": {
             "description": "Unauthorized user"
@@ -257,7 +297,20 @@
         ],
         "responses": {
           "201": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "Module's ID",
+                      "type": "string",
+                      "example": "07745453d0c18842"
+                    }
+                  }
+                }
+              }
+            }
           },
           "403": {
             "description": "Unauthorized user"
@@ -297,7 +350,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Module"
+                }
+              }
+            }
           },
           "403": {
             "description": "Unauthorized user"
@@ -391,7 +451,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Resident"
+                  }
+                }
+              }
+            }
           },
           "403": {
             "description": "Unauthorized user"
@@ -435,7 +505,20 @@
         ],
         "responses": {
           "201": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "Resident's ID",
+                      "type": "string",
+                      "example": "07745453d0c18842"
+                    }
+                  }
+                }
+              }
+            }
           },
           "403": {
             "description": "Unauthorized user"
@@ -475,7 +558,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resident"
+                }
+              }
+            }
           },
           "403": {
             "description": "Unauthorized user"
@@ -577,7 +667,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
           },
           "403": {
             "description": "Unauthorized user"
@@ -656,7 +756,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "403": {
             "description": "Unauthorized user"
@@ -772,7 +879,20 @@
         ],
         "responses": {
           "201": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "SESSION-ID": {
+                      "description": "User's session ID",
+                      "type": "string",
+                      "example": "07745453d0c18842"
+                    }
+                  }
+                }
+              }
+            }
           },
           "403": {
             "description": "Unauthorized user"
@@ -821,6 +941,110 @@
             "description": "Z Coordinate",
             "type": "number",
             "example": 1.2345678
+          }
+        }
+      },
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "carehome": {
+            "description": "Carehome the contact belongs to",
+            "type": "string",
+            "example": 1234
+          },
+          "residents": {
+            "description": "Resident's involved in the contact",
+            "type": "object",
+            "properties": {
+              "one": {
+                "type": "string",
+                "example": 12345678
+              },
+              "two": {
+                "type": "string",
+                "example": 87654321
+              }
+            }
+          },
+          "timestamp": {
+            "description": "Time the contact occured",
+            "type": "string",
+            "example": "12:30:42"
+          }
+        }
+      },
+      "Module": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Module's ID",
+            "type": "string",
+            "example": 12345678
+          },
+          "carehome": {
+            "description": "Carehome the module belongs to",
+            "type": "string",
+            "example": 1234
+          },
+          "room": {
+            "description": "Room the module is in",
+            "type": "string",
+            "example": "Kitchen"
+          },
+          "status": {
+            "description": "Module's current status",
+            "type": "string",
+            "example": "Battery Low"
+          }
+        }
+      },
+      "Resident": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Resident's ID",
+            "type": "string",
+            "example": 12345678
+          },
+          "carehome": {
+            "description": "Carehome the resident belongs to",
+            "type": "string",
+            "example": 1234
+          },
+          "name": {
+            "description": "Resident's name",
+            "type": "string",
+            "example": "John Smith"
+          },
+          "status": {
+            "description": "Resident's covid status",
+            "type": "string",
+            "example": "Needs Testing"
+          },
+          "wearable": {
+            "description": "ID of the resident's wearable",
+            "type": "string",
+            "example": 87654321
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "description": "User's username",
+            "type": "string",
+            "example": "claire1996"
+          },
+          "carehome": {
+            "description": "Carehome the user belongs to",
+            "type": "string",
+            "example": 1234
+          },
+          "role": {
+            "description": "User's role in the carehome",
+            "type": "string",
+            "example": "nurse"
           }
         }
       }
