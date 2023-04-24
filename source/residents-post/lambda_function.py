@@ -71,7 +71,8 @@ def lambda_handler(event, context):
         'statusCode': 201,
         'headers': {},
         'body': json.dumps({
-            'database-status': response["ResponseMetadata"]["HTTPStatusCode"]
+            'database-status': response["ResponseMetadata"]["HTTPStatusCode"],
+            'resident-id': residentId
         }),
         "isBase64Encoded": False,
     }

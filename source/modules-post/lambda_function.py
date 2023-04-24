@@ -41,15 +41,16 @@ def lambda_handler(event, context):
 
     # Validate inputs here
 
-    moduleId = generateId(carehome)
+    moduleId, hash = generateId(carehome)
 
-    response = table.put_item(Item=generateItem(carehome, moduleId, room, status))
+    response = table.put_item(Item=generateItem(carehome, hash, room, status))
 
     return {
         'statusCode': 201,
         'headers': {},
         'body': json.dumps({
-            'database-status': response["ResponseMetadata"]["HTTPStatusCode"]
+            'database-status': response["ResponseMetadata"]["HTTPStatusCode"],
+            'module-id': moduleId
         }),
         "isBase64Encoded": False,
     }
@@ -69,4 +70,4 @@ def generateId(carehome):
         else:
             generated = token_hex(8)
 
-    return sha256(generated.encode()).hexdigest()
+    return generated, sha256(generated.encode()).hexdigest()
