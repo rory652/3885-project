@@ -4,11 +4,11 @@ This section contains all the steps necessary to create a new care home,
 a new account for the care home and login to that account
 
 ## Create a Care Home
-To create a care home, you simply need to make a POST request to the 'carehomes' endpoint (https://api.jerbtracker.co.uk/carehomes).
+To create a care home, you simply need to make a POST request to the 'carehome' endpoint (https://api.jerbtracker.co.uk/carehome).
 This request will return three headers:
 ```json
 {
-  "id": "87654321",
+  "carehome": "87654321",
   "nurse-code": "12345678",
   "admin-code": "12344321"
 }
