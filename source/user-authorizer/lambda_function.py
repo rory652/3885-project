@@ -12,7 +12,9 @@ def lambda_handler(event, context):
         return generatePolicy("", "Deny", resource)
 
     # Parse resource URI
-    carehome, username = parseResource(resource)
+    carehome, endpoint, username = parseResource(resource)
+
+    print(carehome, endpoint, username)
 
     # Get session
     session = getSession(carehome, sessionId)
@@ -26,7 +28,7 @@ def lambda_handler(event, context):
         return generatePolicy(session, "Deny", resource)
 
     # Check Permissions
-    if session["Item"]["username"]["S"] != username:
+    if session["Item"]["username"]["S"] != username and endpoint != "login":
         return generatePolicy(session, "Deny", resource)
 
     return generatePolicy(sessionId, "Allow", resource)
@@ -36,10 +38,16 @@ def lambda_handler(event, context):
 def parseResource(resource):
     temp = resource.split("/")[2:]
 
-    carehome = temp[1]
-    username = temp[3]
+    try:
+        carehome = temp[1]
+        endpoint = temp[2]
+        username = temp[3]
+    except:
+        username = ""
 
-    return carehome, username
+    print(temp)
+
+    return carehome, endpoint, username
 
 
 def getSession(carehome, sessionId):
