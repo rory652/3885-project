@@ -13,7 +13,7 @@
     
     
       
-        <title>Endpoints - JERB Tracker</title>
+        <title>Account Creation - JERB Tracker</title>
       
     
     
@@ -65,6 +65,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#account-creation" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -93,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Endpoints
+              Account Creation
             
           </span>
         </div>
@@ -283,19 +288,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../endpoints/" class="md-nav__link">
         Endpoints
       </a>
-      
     </li>
   
 
@@ -319,11 +316,66 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../account/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Account Creation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Account Creation
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-care-home" class="md-nav__link">
+    Create a Care Home
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-an-account" class="md-nav__link">
+    Create an Account
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#login" class="md-nav__link">
+    Login
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -398,18 +450,42 @@
                   
 
 
-  <h1>Endpoints</h1>
-
-<p><link type="text/css" rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@3/swagger-ui.css"></p>
-<div id="swagger-ui">
-</div>
-<script src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js" charset="UTF-8"></script>
-<script>
-    SwaggerUIBundle({
-      url: 'api.json',
-      dom_id: '#swagger-ui',
-    })
-</script>
+<h1 id="account-creation">Account Creation</h1>
+<p>This section contains all the steps necessary to create a new care home, 
+a new account for the care home and login to that account</p>
+<h2 id="create-a-care-home">Create a Care Home</h2>
+<p>To create a care home, you simply need to make a POST request to the 'carehomes' endpoint (https://api.jerbtracker.co.uk/carehomes).
+This request will return three headers:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;87654321&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;nurse-code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;12345678&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">&quot;admin-code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;12344321&quot;</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+- The 'id' header is the ID of the care home. This will be used in all subsequent requests.
+- The 'nurse-code' is a hex code that is supplied when creating a nurse account.
+- The 'admin-code' is the same but creates an admin account.</p>
+<h2 id="create-an-account">Create an Account</h2>
+<p>To create an account, you need to make a POST request to the 'users' endpoint (https://api.jerbtracker.co.uk/{carehome}/users).
+Replace {carehome} with the ID generated in the previous step. The body for this request is as follows:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;johnSmith1967&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;strongPassword&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;12345678&quot;</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+Use the code generated in the previous step depending on which role you want the user to have.
+These codes should be kept secret so devious users don't have access to data they shouldn't.</p>
+<h2 id="login">Login</h2>
+<p>Logging in is very simple, just make a POST request to the 'login' endpoint (https://api.jerbtracker.co.uk/{carehome}/login).
+You just need to supply your username and password:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;johnSmith1967&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;strongPassword&quot;</span><span class="w"></span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+This will return a header called 'SESSION-ID'. To interact with the other endpoints, you need to supply this header in subsequent requests.</p>
+<p>To logout, just make a DELETE request to the same endpoint with your session ID. The session will be deleted and you will be logged out.</p>
 
 
 
@@ -430,7 +506,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Home" rel="prev">
+        <a href="../requests/" class="md-footer__link md-footer__link--prev" aria-label="Previous: HTTP Requests" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -439,20 +515,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Home
+              HTTP Requests
             </div>
           </div>
         </a>
       
       
         
-        <a href="../requests/" class="md-footer__link md-footer__link--next" aria-label="Next: HTTP Requests" rel="next">
+        <a href="../../about/" class="md-footer__link md-footer__link--next" aria-label="Next: About" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              HTTP Requests
+              About
             </div>
           </div>
           <div class="md-footer__button md-icon">
