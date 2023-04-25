@@ -29,7 +29,7 @@ def lambda_handler(event, context):
     incoming = event['Records'][0]["dynamodb"]["NewImage"]
 
     carehome = incoming["carehome"]["S"]
-    locationId = incoming["id"]["S"]
+    timestamp = incoming["time"]["N"]
 
     try:
         location = {key: value["S"] for (key, value) in incoming["location"]["M"].items()}

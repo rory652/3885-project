@@ -1,20 +1,20 @@
-import json, boto3
+import json, boto3, time
 from boto3.dynamodb.conditions import Key
-from secrets import token_hex
+from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('locations')
 residents = dynamodb.Table('residents')
 
 
-def generateItem(carehome, id, moduleId, location, residentId):
-    return {
+def generateItem(carehome, utc, moduleId, location, residentId):
+    return json.loads(json.dumps({
         'carehome': carehome,
-        'id': id,
+        'time': utc,
         'moduleId': moduleId,
         'location': location,
         'resident': residentId
-    }
+    }), parse_float=Decimal)
 
 
 def lambda_handler(event, context):
@@ -52,9 +52,7 @@ def lambda_handler(event, context):
             "isBase64Encoded": False,
         }
 
-    locationId = generateId(carehome)
-
-    response = table.put_item(Item=generateItem(carehome, locationId, moduleId, location, residentId))
+    response = table.put_item(Item=generateItem(carehome, timestamp(), moduleId, location, residentId))
 
     return {
         'statusCode': 201,
@@ -66,21 +64,8 @@ def lambda_handler(event, context):
     }
 
 
-def generateId(carehome):
-    valid = False
-    generated = token_hex(8)
-
-    while not valid:
-        response = table.query(
-            KeyConditionExpression=Key('carehome').eq(carehome) & Key('id').eq(generated)
-        )
-
-        if len(response["Items"]) == 0:
-            valid = True
-        else:
-            generated = token_hex(8)
-
-    return generated
+def timestamp():
+    return time.time()
 
 
 def getResident(carehome, wearable):
