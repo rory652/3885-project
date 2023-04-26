@@ -1,17 +1,19 @@
 import json, boto3, time
 from boto3.dynamodb.conditions import Key
 from decimal import Decimal
+from hashlib import sha256
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('locations')
 residents = dynamodb.Table('residents')
+modules = dynamodb.Table('modules')
 
 
-def generateItem(carehome, utc, moduleId, location, residentId):
+def generateItem(carehome, utc, room, location, residentId):
     return json.loads(json.dumps({
         'carehome': carehome,
         'time': utc,
-        'moduleId': moduleId,
+        'room': room,
         'location': location,
         'resident': residentId
     }), parse_float=Decimal)
@@ -52,7 +54,17 @@ def lambda_handler(event, context):
             "isBase64Encoded": False,
         }
 
-    response = table.put_item(Item=generateItem(carehome, timestamp(), moduleId, location, residentId))
+    if not (room := getRoom(carehome, moduleId)):
+        return {
+            'statusCode': 400,
+            'headers': {},
+            'body': json.dumps({
+                'error': f'module {moduleId} not found'
+            }),
+            "isBase64Encoded": False,
+        }
+
+    response = table.put_item(Item=generateItem(carehome, timestamp(), room, location, residentId))
 
     return {
         'statusCode': 201,
@@ -77,5 +89,18 @@ def getResident(carehome, wearable):
         for resident in response["Items"]:
             if resident["wearableId"] == wearable:
                 return resident["id"]
+
+    return False
+
+
+def getRoom(carehome, module):
+    hash = sha256(module.encode()).hexdigest()
+
+    response = modules.query(
+        KeyConditionExpression=Key('carehome').eq(carehome) & Key('id').eq(hash)
+    )
+
+    if len(response["Items"]) > 0:
+        return response["Items"][0]["room"]
 
     return False

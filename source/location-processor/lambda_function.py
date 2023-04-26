@@ -38,7 +38,7 @@ def lambda_handler(event, context):
     try:
         location = {key: value["S"] for (key, value) in incoming["location"]["M"].items()}
         resident = incoming["resident"]["S"]
-        module = incoming["moduleId"]["S"]
+        room = incoming["room"]["S"]
     except KeyError as err:
         return {
             'statusCode': 400,
@@ -49,7 +49,7 @@ def lambda_handler(event, context):
             "isBase64Encoded": False,
         }
 
-    locations = getLocations(carehome, timestamp, module, resident)
+    locations = getLocations(carehome, timestamp, room, resident)
 
     contactId = generateId(carehome)
 
@@ -65,7 +65,7 @@ def lambda_handler(event, context):
     }
 
 
-def getLocations(carehome, utc, module, resident):
+def getLocations(carehome, utc, room, resident):
     collected = []
 
     response = locationTable.query(
@@ -73,7 +73,7 @@ def getLocations(carehome, utc, module, resident):
     )
 
     for i in response["Items"]:
-        if i["moduleId"] == module and i["resident"] != resident:
+        if i["room"] == room and i["resident"] != resident:
             if abs(i["time"] - utc) < cutoffTime:
                 collected.append(i)
 
