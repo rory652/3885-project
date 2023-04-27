@@ -69,13 +69,12 @@ def getLocations(carehome, utc, room, resident):
     collected = []
 
     response = locationTable.query(
-        KeyConditionExpression=Key('carehome').eq(carehome)
+        KeyConditionExpression=Key('carehome').eq(carehome) & Key('time').between(utc - cutoffTime, utc + cutoffTime)
     )
 
     for i in response["Items"]:
         if i["room"] == room and i["resident"] != resident:
-            if abs(i["time"] - utc) < cutoffTime:
-                collected.append(i)
+            collected.append(i)
 
     return collected
 
