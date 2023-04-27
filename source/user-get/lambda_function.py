@@ -9,7 +9,9 @@ def lambda_handler(event, context):
     path = event["pathParameters"]
     return {
         'statusCode': 200,
-        'headers': {},
+        'headers': {
+            "Access-Control-Allow-Origin": "*"
+        },
         'body': json.dumps({
             'user': fetch(path["carehome-id"], path["username"])
         }),

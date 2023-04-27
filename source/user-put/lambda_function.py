@@ -43,7 +43,9 @@ def lambda_handler(event, context):
     except KeyError as err:
         return {
             'statusCode': 400,
-            'headers': {},
+            'headers': {
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': f'{str(err)} field missing - set to empty string to not update'
             }),
@@ -54,7 +56,9 @@ def lambda_handler(event, context):
     if len(new_username) < 5 and new_username != "":
         return {
             'statusCode': 400,
-            'headers': {},
+            'headers': {
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': f'new username is too short (minimum 5 characters)'
             }),
@@ -64,7 +68,9 @@ def lambda_handler(event, context):
     if not validateUser(carehome, username):
         return {
             'statusCode': 404,
-            'headers': {},
+            'headers': {
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': 'user not found'
             }),
@@ -74,7 +80,9 @@ def lambda_handler(event, context):
     if (new_role := validateCode(carehome, new_code)) == False:
         return {
             'statusCode': 404,
-            'headers': {},
+            'headers': {
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': 'user not found'
             }),
@@ -88,7 +96,9 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 201,
-        'headers': {},
+        'headers': {
+            "Access-Control-Allow-Origin": "*"
+        },
         'body': json.dumps({
             'database-status': response["ResponseMetadata"]["HTTPStatusCode"]
         }),

@@ -35,7 +35,9 @@ def lambda_handler(event, context):
     except KeyError as err:
         return {
             'statusCode': 400,
-            'headers': {},
+            'headers': {
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': f'{str(err)} field missing'
             }),
@@ -47,7 +49,9 @@ def lambda_handler(event, context):
     if not role:
         return {
             'statusCode': 400,
-            'headers': {},
+            'headers': {
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': f'invalid carehome/role code'
             }),
@@ -57,7 +61,9 @@ def lambda_handler(event, context):
     if len(username) < 5:
         return {
             'statusCode': 400,
-            'headers': {},
+            'headers': {
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': f'new username is too short (minimum 5 characters)'
             }),
@@ -67,7 +73,9 @@ def lambda_handler(event, context):
     if len(password) < 8:
         return {
             'statusCode': 400,
-            'headers': {},
+            'headers': {
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': f'password is too short (minimum 8 characters)'
             }),
@@ -77,7 +85,9 @@ def lambda_handler(event, context):
     if not validateUsername(carehome, username):
         return {
             'statusCode': 400,
-            'headers': {},
+            'headers': {
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': f'username taken'
             }),
@@ -90,7 +100,9 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 201,
-        'headers': {},
+        'headers': {
+            "Access-Control-Allow-Origin": "*"
+        },
         'body': json.dumps({
             'database-status': response["ResponseMetadata"]["HTTPStatusCode"]
         }),

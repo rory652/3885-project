@@ -25,7 +25,12 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 201,
-        'headers': {"carehome": carehome, "nurse-code": nurseCode, "admin-code": adminCode},
+        'headers': {
+            "carehome": carehome,
+            "nurse-code": nurseCode,
+            "admin-code": adminCode,
+            "Access-Control-Allow-Origin": "*"
+        },
         'body': json.dumps({
             'database-status': response["ResponseMetadata"]["HTTPStatusCode"]
         }),

@@ -59,7 +59,8 @@ def lambda_handler(event, context):
     sessionId = generateSession(carehome)
     response = table.put_item(Item=generateItem(carehome, sessionId, username, user[0]["role"]))
 
-    return generateResponse(200, {'database-status': response["ResponseMetadata"]["HTTPStatusCode"]}, headers={"SESSION-ID": sessionId})
+    return generateResponse(200, {'database-status': response["ResponseMetadata"]["HTTPStatusCode"]},
+                            headers={"SESSION-ID": sessionId, "Access-Control-Allow-Origin": "*"})
 
 
 def getUser(carehome, username):

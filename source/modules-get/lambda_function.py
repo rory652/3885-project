@@ -8,7 +8,9 @@ table = dynamodb.Table('modules')
 def lambda_handler(event, context):
     return {
         'statusCode': 200,
-        'headers': {},
+        'headers': {
+            "Access-Control-Allow-Origin": "*"
+        },
         'body': json.dumps({
             'modules': fetch(event["pathParameters"]["carehome-id"])
         }),
