@@ -2,20 +2,22 @@ import json, boto3
 from boto3.dynamodb.conditions import Key
 from secrets import token_hex
 from decimal import Decimal
+from math import sqrt
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('contacts')
 locationTable = dynamodb.Table('locations')
 
-cutoffTime = 5  # maximum time between location to still be counted
+CUTOFFTIME = 5  # maximum time between location to still be counted
+MAXDISTANCE = 2
 
 
-def generateItem(carehome, id, location, resident):
+def generateItem(carehome, id, contacts):
     return {
         'carehome': carehome,
         'id': id,
-        'count': location,
-        'resident': resident
+        'contacts': contacts,
+        'count': len(contacts)
     }
 
 
@@ -36,7 +38,7 @@ def lambda_handler(event, context):
     timestamp = Decimal(incoming["time"]["N"])
 
     try:
-        location = {key: value["S"] for (key, value) in incoming["location"]["M"].items()}
+        location = {key: Decimal(value["N"]) for (key, value) in incoming["location"]["M"].items()}
         resident = incoming["resident"]["S"]
         room = incoming["room"]["S"]
     except KeyError as err:
@@ -50,10 +52,11 @@ def lambda_handler(event, context):
         }
 
     locations = getLocations(carehome, timestamp, room, resident)
+    contacts = checkLocations(location, resident, locations)
 
     contactId = generateId(carehome)
 
-    response = table.put_item(Item=generateItem(carehome, contactId, len(locations), resident))
+    response = table.put_item(Item=generateItem(carehome, contactId, contacts))
 
     return {
         'statusCode': 200,
@@ -69,7 +72,7 @@ def getLocations(carehome, utc, room, resident):
     collected = []
 
     response = locationTable.query(
-        KeyConditionExpression=Key('carehome').eq(carehome) & Key('time').between(utc - cutoffTime, utc + cutoffTime)
+        KeyConditionExpression=Key('carehome').eq(carehome) & Key('time').between(utc - CUTOFFTIME, utc + CUTOFFTIME)
     )
 
     for i in response["Items"]:
@@ -77,6 +80,26 @@ def getLocations(carehome, utc, room, resident):
             collected.append(i)
 
     return collected
+
+
+def checkLocations(location, resident, toCheck):
+    print(location, resident)
+    print(toCheck)
+    valid = []
+
+    for check in toCheck:
+        if getDistance(location, check["location"]) < MAXDISTANCE:
+            valid.append([resident, check["resident"]])
+
+    return valid
+
+
+def getDistance(locOne, locTwo):
+    x = pow(locOne["X"] - locTwo["X"], 2)
+    y = pow(locOne["Y"] - locTwo["Y"], 2)
+    z = pow(locOne["Z"] - locTwo["Z"], 2)
+
+    return sqrt(x + y + z)
 
 
 def generateId(carehome):

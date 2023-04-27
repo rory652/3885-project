@@ -43,6 +43,21 @@ def lambda_handler(event, context):
             "isBase64Encoded": False,
         }
 
+    try:
+        location["X"] = float(location["X"])
+        location["Y"] = float(location["Y"])
+        location["Z"] = float(location["Z"])
+        print(location)
+    except KeyError as err:
+        return {
+            'statusCode': 400,
+            'headers': {},
+            'body': json.dumps({
+                'error': f'incorrect location: {str(err)} field missing'
+            }),
+            "isBase64Encoded": False,
+        }
+
     # Validate inputs here
     if not (residentId := getResident(carehome, wearableId)):
         return {
