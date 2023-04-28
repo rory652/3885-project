@@ -39,7 +39,7 @@ def lambda_handler(event, context):
         if isinstance(headers, str):
             headers = json.loads(headers)
 
-        session = headers["SESSION-ID"]
+        session = headers["session-id"]
     except KeyError as err:
         return generateResponse(400, {'error': f'{str(err)} field missing'})
 
