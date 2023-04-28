@@ -29,7 +29,8 @@ def lambda_handler(event, context):
             "carehome": carehome,
             "nurse-code": nurseCode,
             "admin-code": adminCode,
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "carehome,nurse-code,admin-code"
         },
         'body': json.dumps({
             'database-status': response["ResponseMetadata"]["HTTPStatusCode"]
