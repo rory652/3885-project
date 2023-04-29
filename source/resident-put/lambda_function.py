@@ -4,6 +4,11 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('residents')
 
+standardHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Request-Headers": "SESSION-ID"
+}
+
 
 def generateKey(carehome, id):
     return {
@@ -72,9 +77,7 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 201,
-        'headers': {
-            "Access-Control-Allow-Origin": "*"
-        },
+        'headers': standardHeaders,
         'body': json.dumps({
             'database-status': response["ResponseMetadata"]["HTTPStatusCode"]
         }),

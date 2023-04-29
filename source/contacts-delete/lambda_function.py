@@ -4,14 +4,16 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('contacts')
 
+standardHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Request-Headers": "SESSION-ID"
+}
 
 def lambda_handler(event, context):
     path = event["pathParameters"]
     return {
         'statusCode': 200,
-        'headers': {
-            "Access-Control-Allow-Origin": "*"
-        },
+        'headers': standardHeaders,
         'body': json.dumps({
             'database-status': delete(path["carehome-id"], path["contact-id"])["ResponseMetadata"]["HTTPStatusCode"]
         }),

@@ -9,9 +9,7 @@ def lambda_handler(event, context):
     path = event["pathParameters"]
     return {
         'statusCode': 200,
-        'headers': {
-            "Access-Control-Allow-Origin": "*"
-        },
+        'headers': standardHeaders,
         'body': json.dumps({
             'database-status': delete(path["carehome-id"], path["module-id"])["ResponseMetadata"]["HTTPStatusCode"]
         }),

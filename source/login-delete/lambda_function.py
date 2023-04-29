@@ -43,7 +43,10 @@ def lambda_handler(event, context):
     except KeyError as err:
         return generateResponse(400, {'error': f'{str(err)} field missing'})
 
-    return generateResponse(204, {'database-status': delete(carehome, session)["ResponseMetadata"]["HTTPStatusCode"]}, {"Access-Control-Allow-Origin": "*"})
+    return generateResponse(204,
+                            {'database-status': delete(carehome, session)["ResponseMetadata"]["HTTPStatusCode"]},
+                            {"Access-Control-Allow-Origin": "*"}
+                            )
 
 
 def delete(carehome, session):

@@ -6,6 +6,11 @@ from hashlib import sha256
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('modules')
 
+standardHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Request-Headers": "SESSION-ID"
+}
+
 
 def generateItem(carehome, id, room, status):
     return {
@@ -49,9 +54,7 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 201,
-        'headers': {
-            "Access-Control-Allow-Origin": "*"
-        },
+        'headers': standardHeaders,
         'body': json.dumps({
             'database-status': response["ResponseMetadata"]["HTTPStatusCode"],
             'module-id': moduleId

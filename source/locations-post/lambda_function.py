@@ -37,8 +37,8 @@ def lambda_handler(event, context):
         return {
             'statusCode': 400,
             'headers': {
-"Access-Control-Allow-Origin": "*" 
-},
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': f'{str(err)} field missing'
             }),
@@ -79,8 +79,8 @@ def lambda_handler(event, context):
         return {
             'statusCode': 400,
             'headers': {
-"Access-Control-Allow-Origin": "*" 
-},
+                "Access-Control-Allow-Origin": "*"
+            },
             'body': json.dumps({
                 'error': f'module {moduleId} not found'
             }),
@@ -92,8 +92,8 @@ def lambda_handler(event, context):
     return {
         'statusCode': 201,
         'headers': {
-"Access-Control-Allow-Origin": "*" 
-},
+            "Access-Control-Allow-Origin": "*"
+        },
         'body': json.dumps({
             'database-status': response["ResponseMetadata"]["HTTPStatusCode"]
         }),

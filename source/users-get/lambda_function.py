@@ -4,13 +4,16 @@ from boto3.dynamodb.conditions import Key
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('users')
 
+standardHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Request-Headers": "SESSION-ID"
+}
+
 
 def lambda_handler(event, context):
     return {
         'statusCode': 200,
-        'headers': {
-            "Access-Control-Allow-Origin": "*"
-        },
+        'headers': standardHeaders,
         'body': json.dumps({
             'users': fetch(event["pathParameters"]["carehome-id"])
         }),
