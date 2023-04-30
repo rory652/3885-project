@@ -35,7 +35,7 @@ def lambda_handler(event, context):
         if isinstance(body, str):
             body = json.loads(body)
 
-        moduleId = body["moduleId"]
+        moduleId = event["headers"]["module-id"]
         location = body["location"]
         wearableId = body["wearable"]
     except KeyError as err:

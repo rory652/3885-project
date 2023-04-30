@@ -45,6 +45,15 @@ def lambda_handler(event, context):
             }),
             "isBase64Encoded": False,
         }
+    except ValueError as err:
+        return {
+            'statusCode': 400,
+            'headers': standardHeaders,
+            'body': json.dumps({
+                'error': f'{str(err)}'
+            }),
+            "isBase64Encoded": False,
+        }
 
     # Validate inputs here
 
