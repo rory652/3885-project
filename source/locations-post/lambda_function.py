@@ -8,6 +8,11 @@ table = dynamodb.Table('locations')
 residents = dynamodb.Table('residents')
 modules = dynamodb.Table('modules')
 
+standardHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Request-Headers": "MODULE-ID"
+}
+
 
 def generateItem(carehome, utc, room, location, residentId):
     return json.loads(json.dumps({
@@ -36,9 +41,7 @@ def lambda_handler(event, context):
     except KeyError as err:
         return {
             'statusCode': 400,
-            'headers': {
-                "Access-Control-Allow-Origin": "*"
-            },
+            'headers': standardHeaders,
             'body': json.dumps({
                 'error': f'{str(err)} field missing'
             }),
@@ -53,9 +56,7 @@ def lambda_handler(event, context):
     except KeyError as err:
         return {
             'statusCode': 400,
-            'headers': {
-                "Access-Control-Allow-Origin": "*"
-            },
+            'headers': standardHeaders,
             'body': json.dumps({
                 'error': f'incorrect location: {str(err)} field missing'
             }),
@@ -66,9 +67,7 @@ def lambda_handler(event, context):
     if not (residentId := getResident(carehome, wearableId)):
         return {
             'statusCode': 400,
-            'headers': {
-                "Access-Control-Allow-Origin": "*"
-            },
+            'headers': standardHeaders,
             'body': json.dumps({
                 'error': f'wearable {wearableId} not found'
             }),
@@ -78,9 +77,7 @@ def lambda_handler(event, context):
     if not (room := getRoom(carehome, moduleId)):
         return {
             'statusCode': 400,
-            'headers': {
-                "Access-Control-Allow-Origin": "*"
-            },
+            'headers': standardHeaders,
             'body': json.dumps({
                 'error': f'module {moduleId} not found'
             }),
@@ -91,9 +88,7 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 201,
-        'headers': {
-            "Access-Control-Allow-Origin": "*"
-        },
+        'headers': standardHeaders,
         'body': json.dumps({
             'database-status': response["ResponseMetadata"]["HTTPStatusCode"]
         }),
