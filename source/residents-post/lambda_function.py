@@ -47,9 +47,6 @@ def lambda_handler(event, context):
             "isBase64Encoded": False,
         }
 
-    # Validate inputs here
-    status = True if body["status"].lower() == "true" else False
-
     if name == "":
         return {
             'statusCode': 400,

@@ -68,8 +68,6 @@ def lambda_handler(event, context):
             "isBase64Encoded": False,
         }
 
-    new_status = True if new_status == "true" else False
-
     keys = generateKey(carehome, resident)
     attributes = generateAttributes(name=new_name, status=new_status, wearableId=new_wearable)
 
