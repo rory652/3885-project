@@ -9,10 +9,11 @@ standardHeaders = {
     "Access-Control-Request-Headers": "SESSION-ID"
 }
 
+
 def lambda_handler(event, context):
     path = event["pathParameters"]
     return {
-        'statusCode': 200,
+        'statusCode': 204,
         'headers': standardHeaders,
         'body': json.dumps({
             'database-status': delete(path["carehome-id"], path["module-id"])["ResponseMetadata"]["HTTPStatusCode"]
