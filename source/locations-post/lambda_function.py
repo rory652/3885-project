@@ -14,11 +14,11 @@ standardHeaders = {
 }
 
 
-def generateItem(carehome, utc, room, location, residentId):
+def generateItem(carehome, utc, module, location, residentId):
     return json.loads(json.dumps({
         'carehome': carehome,
         'time': utc,
-        'room': room,
+        'module': module,
         'location': location,
         'resident': residentId
     }), parse_float=Decimal)
@@ -74,7 +74,7 @@ def lambda_handler(event, context):
             "isBase64Encoded": False,
         }
 
-    if not (room := getRoom(carehome, moduleId)):
+    if not checkModule(carehome, moduleId):
         return {
             'statusCode': 400,
             'headers': standardHeaders,
@@ -84,7 +84,7 @@ def lambda_handler(event, context):
             "isBase64Encoded": False,
         }
 
-    response = table.put_item(Item=generateItem(carehome, timestamp(), room, location, residentId))
+    response = table.put_item(Item=generateItem(carehome, timestamp(), moduleId, location, residentId))
 
     return {
         'statusCode': 201,
@@ -113,14 +113,11 @@ def getResident(carehome, wearable):
     return False
 
 
-def getRoom(carehome, module):
+def checkModule(carehome, module):
     hash = sha256(module.encode()).hexdigest()
 
     response = modules.query(
         KeyConditionExpression=Key('carehome').eq(carehome) & Key('id').eq(hash)
     )
 
-    if len(response["Items"]) > 0:
-        return response["Items"][0]["room"]
-
-    return False
+    return len(response["Items"]) > 0
