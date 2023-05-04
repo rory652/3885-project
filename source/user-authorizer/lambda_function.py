@@ -28,7 +28,7 @@ def lambda_handler(event, context):
         return generatePolicy(session, "Deny", resource)
 
     # Check Permissions
-    if session["Item"]["username"]["S"] != username and endpoint != "login":
+    if session["Item"]["username"]["S"] != username and endpoint != "login" and session["Item"]["role"]["S"] != "admin":
         return generatePolicy(session, "Deny", resource)
 
     return generatePolicy(sessionId, "Allow", resource)
